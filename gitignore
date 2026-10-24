@@ -1,0 +1,41 @@
+# Entornos y caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Secretos
+.env
+.env.*
+*.key
+*.pem
+secrets/
+credentials*.json
+
+# Datos (no versionar crudos ni procesados)
+data/raw/*
+data/silver/*
+data/gold/*
+!data/raw/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+*.csv.gz
+*.zip
+*.parquet
+*.db
+*.sqlite
+*.sqlite3
+
+# Artefactos de modelos
+*.pkl
+*.joblib
+*.onnx
+*.pt
+*.h5
+mlruns/
+
+# Sistema y editores
+.DS_Store
+.idea/
+.vscode/
