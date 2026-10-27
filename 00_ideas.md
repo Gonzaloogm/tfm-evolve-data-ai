@@ -6,9 +6,9 @@
 - **Ricardo Jiménez Fosado** @jimenezfosadoricardo-sudo
 - **Enlace al repositorio común:** `https://github.com/Gonzaloogm/tfm-evolve-data-ai`
 
-**Justificación del equipo de tres.** Cada persona cubre un frente distinto del proyecto: Gonzalo, la parte de ingeniería (datos en SQL, backend, despliegue y MLOps); Vanessa, la estadística y el modelado; y Ricardo, la visión de negocio, los costes y la gestión ágil. Con tres personas podemos repartir las actividades sin que nadie quede como cuello de botella y revisar el trabajo entre nosotros.
 
 **Convención de esta ficha.** "Confirmado" significa que el equipo ha descargado una muestra y comprobado el acceso y la licencia, con fecha. "Hipótesis" significa fuente candidata cuyo acceso o licencia todavía no se han comprobado.
+# Actividad 0: Equipos, ideas de producto y repositorio
 
 ---
 
@@ -28,13 +28,16 @@ Cuando el gestor planifica sus tarifas para las próximas semanas, consulta en l
 
 #### Datos
 - **Fuente 1 (Precios y disponibilidad):** *Inside Airbnb — Madrid* (`listings.csv` y `calendar.csv`: precios, disponibilidad diaria, coordenadas y atributos del inmueble).
-  - *Estado y licencia:* **Hipótesis** (descarga pública en `insideairbnb.com`; muestra aún no descargada a fecha [dd/mm/aaaa]). Licencia: [copiar el texto literal de la página de datos de Inside Airbnb, con enlace]. Datos de anfitriones e inmuebles sin información personal sensible [por confirmar en la muestra].
+  - *Enlaces:* [descarga](https://insideairbnb.com/get-the-data/) · [políticas de uso](https://insideairbnb.com/data-policies/)
+  - *Estado y licencia:* **Hipótesis.** Muestra aún no descargada a fecha [dd/mm/aaaa]. Según sus [políticas de uso](https://insideairbnb.com/data-policies/), consultadas el 27/10/2026, los datos deben atribuirse y citarse, no se permite republicarlos y los cortes antiguos se archivan: hay que pedirlos con un *Archived Data Request*, que puede rechazarse o tener coste. La licencia formal está pendiente de confirmar en la página de descarga [copiar el texto literal, con enlace]. **Consecuencia:** no subiremos los datos al repositorio, solo el código y las instrucciones de descarga.
+  - *Privacidad:* el fichero incluye el nombre de pila y el identificador del anfitrión. Se excluirán en la capa silver porque no se necesitan [confirmar los campos en la muestra].
   - *Limitación importante:* `calendar.csv` indica si una noche está **disponible o no**, no si fue **reservada**. Una noche no disponible puede ser una reserva o un bloqueo del anfitrión. Usaremos la no disponibilidad como *aproximación* (proxy) de ocupación y lo declararemos así en todos los resultados.
 - **Fuente 2 (Eventos de la ciudad):** *Portal de Datos Abiertos del Ayuntamiento de Madrid — Agenda de Actividades y Eventos* (`300107-0-agenda-actividades-eventos`, CSV/JSON con fechas, horarios, coordenadas, distrito y recinto).
-  - *Estado y licencia:* **Hipótesis** (muestra aún no descargada a fecha [dd/mm/aaaa]). Condiciones de reutilización: [copiar el texto literal del portal, con enlace].
+  - *Enlaces:* [ficha del conjunto de datos](https://datos.madrid.es/en/dataset/300107-0-agenda-actividades-eventos) · [estructura del fichero](https://datos.madrid.es/FWProjects/egob/Catalogo/XComun/Ficheros/Estructura_DS_eventos_actividades.pdf) · [condiciones de uso](https://datos.madrid.es/pages/condiciones-de-uso)
+  - *Estado y licencia:* **Hipótesis** para el acceso, porque la muestra aún no está descargada a fecha [dd/mm/aaaa]. Licencia: la ficha indica **Creative Commons Attribution 4.0 International (CC BY 4.0)** ([texto legal](https://creativecommons.org/licenses/by/4.0/legalcode.es)); consultada el 27/10/2026, con última actualización del conjunto el 26/10/2026.
 - **Hipótesis pendientes de validar:**
-  - Si la agenda del Ayuntamiento conserva eventos pasados o solo publica los futuros. Si no conserva histórico, no podremos cruzarla con ocupación pasada.
-  - Cuántos cortes (*snapshots*) históricos de Inside Airbnb hay para Madrid y qué periodo cubren.
+  - Si la agenda del Ayuntamiento conserva eventos pasados o solo publica los futuros. La ficha no lo indica. Si no conserva histórico, tendremos que guardar descargas periódicas desde ahora o buscar otra fuente histórica; si no, no podremos cruzarla con la ocupación pasada.
+  - Cuántos cortes (*snapshots*) de Inside Airbnb para Madrid se pueden descargar libremente y qué periodo cubren, ya que los antiguos requieren solicitud.
   - Si el precio de `calendar.csv` varía lo suficiente en el tiempo para estudiar su efecto.
 
 #### Primera versión o MVP
@@ -54,13 +57,14 @@ Cuando el gestor planifica sus tarifas para las próximas semanas, consulta en l
 
 #### Problema y usuario
 - **Usuario objetivo:** Responsables de conversión, *growth managers* y directores de tiendas online medianas con catálogos amplios.
-- **Necesidad y solución actual:** Gran parte de los carritos online se abandonan antes del pago [citar la fuente de la cifra, o eliminarla si no se encuentra]. Hoy las tiendas lo abordan con reglas estáticas (pop-ups de descuento para todos al salir, correos masivos horas después), que no distinguen entre quien iba a comprar de todos modos y quien duda. *Hipótesis: la contrastaremos con 3-5 entrevistas a responsables de tiendas online.*
+- **Necesidad y solución actual:** Alrededor del 70% de los carritos online se abandonan antes del pago, según la media de estudios recopilada por [Baymard Institute](https://baymard.com/research/cart-abandonment-rate) (consultada el 27/10/2026). Hoy las tiendas lo abordan con reglas estáticas (pop-ups de descuento para todos al salir, correos masivos horas después), que no distinguen entre quien iba a comprar de todos modos y quien duda. *Hipótesis: la contrastaremos con 3-5 entrevistas a responsables de tiendas online.*
 
 #### Uso y valor
 El gestor audita sus segmentos de abandono y consulta, por sesión y por categoría, la probabilidad estimada de compra y los factores que más pesan (categoría, rango de precio, número de productos vistos, comportamiento en el carrito). Con ello decide qué segmentos intervenir primero. Opcionalmente, un simulador con supuestos explícitos permite estimar el coste de distintas políticas de incentivo; el dato no contiene cupones ni descuentos, por lo que no estimamos un descuento exacto.
 
 #### Datos
-- **Fuente principal:** *REES46 Multi-Category eCommerce Behavior Dataset* (Kaggle), con eventos `view`, `cart`, `remove_from_cart` y `purchase` e `event_time`, `product_id`, `category_id`, `brand`, `price`, `user_id` y `user_session`. El volumen total es de cientos de millones de eventos repartidos en ficheros mensuales de varios GB.
+- **Fuente principal:** *REES46 Multi-Category eCommerce Behavior Dataset* (Kaggle), con eventos `view`, `cart`, `remove_from_cart` y `purchase` e `event_time`, `product_id`, `category_id`, `brand`, `price`, `user_id` y `user_session`. El volumen total es de cientos de millones de eventos repartidos en ficheros mensuales de varios GB (unos 9 GB solo noviembre de 2019).
+  - *Enlace:* [ficha en Kaggle](https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store)
   - *Estado y licencia:* **Hipótesis** (muestra aún no descargada a fecha [dd/mm/aaaa]). Licencia: [copiar el texto literal de la ficha de Kaggle, con enlace]. No damos por sentada ninguna licencia hasta leerla. Trabajaremos con una muestra temporal acotada y reproducible, y comprobaremos si la licencia permite redistribuir muestras en el repositorio; si no, solo se subirá el código que las descarga.
   - *Privacidad:* los identificadores de usuario y de sesión vienen seudonimizados. No se intentará reidentificar a nadie.
 - **Hipótesis pendientes de validar:**
@@ -81,7 +85,7 @@ El gestor audita sus segmentos de abandono y consulta, por sesión y por categor
 ### Idea 3: Radar de Oportunidades — Detección y Priorización de Licitaciones TI Desiertas o de Baja Concurrencia en Contratación Pública
 
 #### Título y descripción
-**Radar de Oportunidades** (nombre provisional) es un pipeline de datos y una herramienta de priorización para equipos comerciales B2B del sector tecnológico. Procesa los datos abiertos de la **Plataforma de Contratación del Sector Público (PLACSP)** sobre licitaciones TI (**CPV** división 72, servicios informáticos) para detectar las que quedan **desiertas o reciben muy pocas ofertas**, y las ordena con una puntuación explicable que indica por qué merece la pena acercarse a cada una.
+**Radar de Oportunidades** (nombre provisional) es un pipeline de datos y una herramienta de priorización para equipos comerciales B2B del sector tecnológico. Procesa los datos abiertos de la **Plataforma de Contratación del Sector Público (PLACSP)** sobre licitaciones TI (**CPV** división 72, servicios informáticos; valoraremos incluir la división 48, paquetes de software) para detectar las que quedan **desiertas o reciben muy pocas ofertas**, y las ordena con una puntuación explicable que indica por qué merece la pena acercarse a cada una.
 
 #### Problema y usuario
 - **Usuario objetivo:** Responsables comerciales y de desarrollo de negocio de consultoras tecnológicas e integradores de sistemas (pymes y medianas) que venden a administraciones públicas.
@@ -92,7 +96,9 @@ Cada semana, el responsable comercial abre el ranking de licitaciones TI recient
 
 #### Datos
 - **Fuente principal:** *PLACSP — datos abiertos de licitaciones*, distribuidos mediante sindicación **Atom**, con los datos de cada licitación en formato **XML CODICE**. Variables previstas: importe de licitación (presupuesto base), número de ofertas, código CPV, órgano de contratación, tipo de procedimiento y estado de adjudicación.
-  - *Estado y licencia:* **Hipótesis.** Aún no hemos descargado una muestra ni verificado las condiciones de reutilización. Muestra a fecha [dd/mm/aaaa]; licencia: [copiar el texto literal, con enlace]. Pendiente: confirmar campos disponibles y cobertura histórica.
+  - *Enlaces:* [datos abiertos de licitaciones (Ministerio de Hacienda)](https://www.hacienda.gob.es/es-ES/GobiernoAbierto/Datos%20Abiertos/Paginas/licitaciones_plataforma_contratacion.aspx) · [especificación de sindicación](https://www.hacienda.gob.es/Documentacion/Publico/D.G.%20PATRIMONIO/Plataforma_Contratacion/especificacion-sindicacion-1-3.pdf). Para leer los ficheros, la propia página ofrece la herramienta OpenPLACSP.
+  - *Cobertura según la página (27/10/2026):* licitaciones agregadas desde el 1/1/2016, contratos menores desde el 1/1/2018 y consultas preliminares de mercado desde el 1/4/2022.
+  - *Estado y licencia:* **Hipótesis.** Aún no hemos descargado una muestra (fecha [dd/mm/aaaa]). La página dice que la información está "disponible para su reutilización", pero no nombra una licencia concreta. Revisaremos el [aviso legal](https://www.hacienda.gob.es/es-es/paginas/avisolegal.aspx) y copiaremos las condiciones literales antes de usar los datos. Pendiente también: confirmar los campos disponibles.
 - **Privacidad:** los adjudicatarios son sobre todo personas jurídicas. Si aparecen autónomos, se excluirán o seudonimizarán.
 - **Fuera del MVP:** *Tenders Electronic Daily (TED)* para licitaciones europeas, y análisis de los pliegos técnicos en PDF con OCR y NLP. Se valorarán como ampliación o como función del módulo LLM en la Actividad 6.
 
