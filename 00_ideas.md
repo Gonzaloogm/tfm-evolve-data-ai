@@ -8,7 +8,6 @@
 
 
 **Convención de esta ficha.** "Confirmado" significa que el equipo ha descargado una muestra y comprobado el acceso y la licencia, con fecha. "Hipótesis" significa fuente candidata cuyo acceso o licencia todavía no se han comprobado.
-# Actividad 0: Equipos, ideas de producto y repositorio
 
 ---
 
