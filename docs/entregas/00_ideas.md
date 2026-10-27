@@ -147,10 +147,38 @@ Cada semana, el responsable comercial revisa ambas vistas, filtra por organismo,
 
 ---
 
-## 3. Cambios tras el primer feedback (27/10/2026)
+### Idea 4: Asistente de ocupación y precios para espacios escénicos y festivales (nombre provisional)
 
-- **Un solo documento:** esta ficha (`docs/entregas/00_ideas.md`) sustituye a la copia que había en la raíz del repositorio.
-- **Estados fechados:** se han sustituido los marcadores pendientes por estados con fecha y responsable.
-- **RevPAR Pulse:** se acota a precios anunciados y disponibilidad. Ya no estima reservas, ingresos ni tarifa óptima.
-- **CartRescue AI:** se precisa el momento de la predicción (al añadir al carrito, con los eventos de la sesión hasta ese instante) y cómo se comprobará la utilidad. Queda condicionada a conseguir una tienda colaboradora antes de la Actividad 2.
-- **Radar de Oportunidades:** se separan las licitaciones cerradas (resultado observado) de las predicciones sobre las abiertas, y se añade la validación con un responsable comercial.
+#### Título y descripción
+Herramienta que ayuda a gestores de espacios culturales y festivales a anticipar la ocupación de cada sesión y a decidir dónde concentrar promoción o ajustar tarifas. Se apoya en la asistencia histórica, la meteorología y la agenda de eventos simultáneos, y explica qué factores empujan cada previsión.
+
+#### Problema y usuario
+- **Usuario objetivo:** gestores de teatros y auditorios municipales, salas pequeñas y festivales.
+- **Necesidad y solución actual:** programan y fijan tarifas con la experiencia de temporadas anteriores. Revisan la asistencia en hojas de cálculo y tienen poca información sobre qué sesiones suelen quedar vacías y por qué.
+- *Hipótesis: la contrastaremos con 3-5 entrevistas a gestores.*
+
+#### Uso y valor
+Un gestor prepara la programación de la próxima temporada. Consulta la ocupación prevista por día de la semana, franja y tipo de espectáculo, identifica las sesiones con riesgo de baja ocupación y decide dónde reforzar la comunicación o probar una política de precios distinta.
+
+#### Datos
+
+| Fuente candidata | Qué aporta | Estado de acceso | Licencia | Limitaciones conocidas |
+|---|---|---|---|---|
+| [ICANE, "Recaudación de teatro"](https://datos.icane.es/sr_Latn/dataset/artes-escenicas/resource/08f46e22-02a4-4d5a-b423-d71130fdf489) (CSV y JSON-stat) | Recaudación de teatro | Hipótesis (pendiente a 27/10/2026) | La ficha del portal no indica licencia | Parece agregado. Granularidad por comprobar |
+| [Ayuntamiento de Alcobendas, "Teatro Auditorio. Asistentes a espectáculos desde 2012. Histórico"](https://datos.gob.es/es/catalogo/l01280066-teatro-auditorio-asistentes-a-espectaculos-desde-2012-historico1) (datos.gob.es) | Asistentes por espectáculo | Hipótesis (pendiente a 27/10/2026) | Sin verificar a 27/10/2026 | La descripción menciona asistentes, no precio ni recaudación |
+| [AEMET OpenData](https://opendata.aemet.es/) | Meteorología | Hipótesis (requiere clave gratuita; pendiente a 27/10/2026) | Sin verificar a 27/10/2026 | Cobertura por estación meteorológica |
+| Agenda de eventos de ayuntamientos (por ejemplo, la [agenda del Ayuntamiento de Madrid](https://datos.madrid.es/en/dataset/300107-0-agenda-actividades-eventos)) | Eventos simultáneos en la ciudad | Hipótesis: fuente por localizar para cada ciudad | Madrid: CC BY 4.0. Resto sin verificar | Cobertura desigual. La de Madrid no conserva histórico (comprobado el 27/10/2026, ver idea 1) |
+
+*Comprobación de muestras:* pendiente a 27/10/2026. Al descargar cada muestra se anotará su fecha y se cambiará su estado.
+
+*Privacidad:* son datos agregados sin personas identificables.
+
+#### Primera versión o MVP
+- **Usuario y tarea:** un gestor que prepara la programación y decide dónde reforzar la promoción.
+- **Mostraríamos:** previsión de ocupación por sesión frente a un baseline (media histórica por día y franja), identificación de sesiones de riesgo y explicación por factores.
+- **El módulo de precio solo entra si los datos traen precio con variación suficiente.** Si no, el producto se limita a previsión de ocupación.
+- **Dejamos fuera:** tiempo real, detección de bots e infraestructura distribuida.
+- **Criterio de éxito:** el modelo mejora al baseline con validación temporal y el gestor entiende la explicación en una prueba breve.
+
+#### Viabilidad y dudas
+Lo que más nos preocupa es la granularidad. Si cada fila es un año o un mes, no podremos entrenar un modelo por sesión. Tampoco sabemos si alguna fuente trae precio, y sin variación de precio no se puede estimar su efecto. Además, la licencia de ICANE no consta. Comprobaremos qué representa una fila, el periodo cubierto, los nulos y la licencia en una hora de trabajo. Si la granularidad no basta, pasamos a otra de las ideas.
