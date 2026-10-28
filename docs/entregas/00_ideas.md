@@ -147,38 +147,53 @@ Cada semana, el responsable comercial revisa ambas vistas, filtra por organismo,
 
 ---
 
-### Idea 4: Asistente de ocupación y precios para espacios escénicos y festivales (nombre provisional)
+### Idea 4: Taquilla Pulse — Previsión de venta, alertas y precio para eventos (nombre provisional)
+
+> **Idea condicionada a una colaboración.** Solo será candidata si **Fever** (u otro organizador o plataforma de venta de entradas) acepta compartir datos de venta y validar el producto con nosotros. La conexión se está gestionando a través de Evolve (pendiente a 28/10/2026). Sin colaborador, no hay datos públicos de venta por sesión suficientes y descartaremos la idea.
 
 #### Título y descripción
-Herramienta que ayuda a gestores de espacios culturales y festivales a anticipar la ocupación de cada sesión y a decidir dónde concentrar promoción o ajustar tarifas. Se apoya en la asistencia histórica, la meteorología y la agenda de eventos simultáneos, y explica qué factores empujan cada previsión.
+**Taquilla Pulse** ayuda a los equipos que programan y venden eventos con aforo (conciertos, exposiciones, experiencias, festivales, teatro) a saber **qué sesiones van a quedarse por debajo de su aforo** y a decidir **dónde reforzar la promoción o ajustar el precio**. Compara el ritmo de venta de cada sesión con el de eventos similares, avisa pronto cuando una sesión va por detrás y explica qué factores empujan cada previsión.
 
 #### Problema y usuario
-- **Usuario objetivo:** gestores de teatros y auditorios municipales, salas pequeñas y festivales.
-- **Necesidad y solución actual:** programan y fijan tarifas con la experiencia de temporadas anteriores. Revisan la asistencia en hojas de cálculo y tienen poca información sobre qué sesiones suelen quedar vacías y por qué.
-- *Hipótesis: la contrastaremos con 3-5 entrevistas a gestores.*
+- **Usuario objetivo:** responsables de programación, marketing y *pricing* de una plataforma de venta de entradas (por ejemplo, Fever) o de los organizadores que venden a través de ella.
+- **Necesidad y solución actual:** con muchas sesiones a la venta a la vez, es difícil detectar a tiempo cuáles no se van a llenar. A menudo se descubre cuando queda poco margen para actuar, y las decisiones de promoción y precio se toman con reglas fijas o con la experiencia. *Hipótesis: la contrastaremos con el equipo del colaborador y con 3-5 entrevistas a organizadores.*
 
 #### Uso y valor
-Un gestor prepara la programación de la próxima temporada. Consulta la ocupación prevista por día de la semana, franja y tipo de espectáculo, identifica las sesiones con riesgo de baja ocupación y decide dónde reforzar la comunicación o probar una política de precios distinta.
+Cada semana, el responsable abre el panel de sesiones a la venta y ve:
+1. **Ventas observadas:** entradas vendidas y porcentaje del aforo, a día de hoy.
+2. **Previsión** de las entradas vendidas el día del evento, con un rango.
+3. **Alerta** de las sesiones que van por detrás de lo normal a esa distancia del evento. Por ejemplo: *"Sábado 14: 38% vendido a 15 días; los eventos similares iban por el 55%. Riesgo alto de no llenar."*
+4. **Explicación** de los factores (tipo de evento, día, antelación, festivos, precio) y, si los datos lo permiten, el efecto estimado de un cambio de precio.
+
+Con eso decide dónde invertir en promoción y en qué sesiones probar otro precio. La herramienta **distingue siempre lo observado de lo previsto**.
+
+**Momento de la predicción:** cada día de venta, con los datos disponibles hasta ese día y sin información posterior.
 
 #### Datos
 
-| Fuente candidata | Qué aporta | Estado de acceso | Licencia | Limitaciones conocidas |
+| Fuente | Qué aporta | Estado (28/10/2026) | Licencia | Limitaciones conocidas |
 |---|---|---|---|---|
-| [ICANE, "Recaudación de teatro"](https://datos.icane.es/sr_Latn/dataset/artes-escenicas/resource/08f46e22-02a4-4d5a-b423-d71130fdf489) (CSV y JSON-stat) | Recaudación de teatro | Hipótesis (pendiente a 27/10/2026) | La ficha del portal no indica licencia | Parece agregado. Granularidad por comprobar |
-| [Ayuntamiento de Alcobendas, "Teatro Auditorio. Asistentes a espectáculos desde 2012. Histórico"](https://datos.gob.es/es/catalogo/l01280066-teatro-auditorio-asistentes-a-espectaculos-desde-2012-historico1) (datos.gob.es) | Asistentes por espectáculo | Hipótesis (pendiente a 27/10/2026) | Sin verificar a 27/10/2026 | La descripción menciona asistentes, no precio ni recaudación |
-| [AEMET OpenData](https://opendata.aemet.es/) | Meteorología | Hipótesis (requiere clave gratuita; pendiente a 27/10/2026) | Sin verificar a 27/10/2026 | Cobertura por estación meteorológica |
-| Agenda de eventos de ayuntamientos (por ejemplo, la [agenda del Ayuntamiento de Madrid](https://datos.madrid.es/en/dataset/300107-0-agenda-actividades-eventos)) | Eventos simultáneos en la ciudad | Hipótesis: fuente por localizar para cada ciudad | Madrid: CC BY 4.0. Resto sin verificar | Cobertura desigual. La de Madrid no conserva histórico (comprobado el 27/10/2026, ver idea 1) |
+| Datos de venta del colaborador (Fever u otro) | Ventas por sesión y día, aforo, precio y tipo de evento | Hipótesis: pendiente de la colaboración | Acuerdo con el colaborador, con confidencialidad si hace falta | Sin colaboración, la idea se descarta. Los datos no se subirán al repositorio |
+| Calendario laboral oficial (festivos) | Festivos y puentes | Hipótesis: fuente por localizar | Pendiente | Ninguna relevante |
+| [AEMET OpenData](https://opendata.aemet.es/) | Meteorología diaria | Hipótesis (requiere clave gratuita) | Pendiente | Solo útil en eventos al aire libre |
+| [Ayto. de Alcobendas, "Teatro Auditorio. Asistentes a espectáculos desde 2012"](https://datos.gob.es/es/catalogo/l01280066-teatro-auditorio-asistentes-a-espectaculos-desde-2012-historico1) | Asistencia final por espectáculo | Hipótesis: falta abrir la muestra | Pendiente de verificar | Solo para preparar el pipeline mientras llega el acceso. No tiene ventas por día ni precio |
 
-*Comprobación de muestras:* pendiente a 27/10/2026. Al descargar cada muestra se anotará su fecha y se cambiará su estado.
+*Descartadas:* ICANE (agregada y sin licencia) y las agendas municipales (no guardan histórico; comprobado el 27/10/2026 con la de Madrid).
 
-*Privacidad:* son datos agregados sin personas identificables.
+*Privacidad:* se trabajará con datos agregados por sesión y día, sin datos de compradores.
 
 #### Primera versión o MVP
-- **Usuario y tarea:** un gestor que prepara la programación y decide dónde reforzar la promoción.
-- **Mostraríamos:** previsión de ocupación por sesión frente a un baseline (media histórica por día y franja), identificación de sesiones de riesgo y explicación por factores.
-- **El módulo de precio solo entra si los datos traen precio con variación suficiente.** Si no, el producto se limita a previsión de ocupación.
-- **Dejamos fuera:** tiempo real, detección de bots e infraestructura distribuida.
-- **Criterio de éxito:** el modelo mejora al baseline con validación temporal y el gestor entiende la explicación en una prueba breve.
+- **Qué incluirá funcionando:**
+  1. Capa `gold` con una fila por sesión y día de venta.
+  2. Análisis estadístico de las curvas de venta por tipo de evento y antelación.
+  3. Modelo de las ventas finales a partir de las ventas acumuladas, comparado con un baseline (curva media por tipo de evento), usando validación temporal.
+  4. Panel de sesiones con sus alertas.
+  5. Asistente LLM que explica las previsiones citando los datos.
+- **Precio:** el módulo de efecto del precio solo entra si los datos traen precios con variación suficiente entre sesiones comparables. Si no, el producto se limita a previsión y alertas.
+- **Fuera:** venta de entradas propia, tiempo real, detección de bots e infraestructura distribuida.
+- **Criterio de éxito:** el modelo mejora al baseline en las semanas reservadas para la prueba, y el equipo del colaborador usa las alertas para decidir en una prueba breve.
 
 #### Viabilidad y dudas
-Lo que más nos preocupa es la granularidad. Si cada fila es un año o un mes, no podremos entrenar un modelo por sesión. Tampoco sabemos si alguna fuente trae precio, y sin variación de precio no se puede estimar su efecto. Además, la licencia de ICANE no consta. Comprobaremos qué representa una fila, el periodo cubierto, los nulos y la licencia en una hora de trabajo. Si la granularidad no basta, pasamos a otra de las ideas.
+- **Depende por completo de la colaboración.** Hay que confirmar, antes de la Actividad 2, que se pueden obtener datos de venta por día y sesión y quién validará el producto.
+- **Sesgo de confusión en el precio:** los precios suelen cambiar precisamente porque la sesión va bien o mal, así que el efecto del precio puede no ser estimable. En ese caso el producto se limita a previsión y alertas, que ya aportan valor por sí solas.
+- **Confidencialidad:** si el acuerdo impide publicar los datos, acordaremos con el profesorado una vía de revisión y usaremos muestras anonimizadas o simuladas, declaradas como tales.
