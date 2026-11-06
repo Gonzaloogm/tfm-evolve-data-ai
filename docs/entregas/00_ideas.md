@@ -147,53 +147,50 @@ Cada semana, el responsable comercial revisa ambas vistas, filtra por organismo,
 
 ---
 
-### Idea 4: Taquilla Pulse — Previsión de venta, alertas y precio para eventos (nombre provisional)
+### Idea 4: CartRescue Marketplace — Previsión de ventas y alertas por producto para marcas en marketplaces (nombre provisional)
 
-> **Idea condicionada a una colaboración.** Solo será candidata si **Fever** (u otro organizador o plataforma de venta de entradas) acepta compartir datos de venta y validar el producto con nosotros. La conexión se está gestionando a través de Evolve (pendiente a 28/10/2026). Sin colaborador, no hay datos públicos de venta por sesión suficientes y descartaremos la idea.
+> **Idea condicionada a una colaboración.** Es la adaptación de CartRescue al caso de una agencia que gestiona marcas en Amazon y otros marketplaces. Solo será candidata si **Brainy Commerce** acepta compartir datos y validar el producto con nosotros (propuesta enviada; pendiente de respuesta a 06/11/2026).
 
 #### Título y descripción
-**Taquilla Pulse** ayuda a los equipos que programan y venden eventos con aforo (conciertos, exposiciones, experiencias, festivales, teatro) a saber **qué sesiones van a quedarse por debajo de su aforo** y a decidir **dónde reforzar la promoción o ajustar el precio**. Compara el ritmo de venta de cada sesión con el de eventos similares, avisa pronto cuando una sesión va por detrás y explica qué factores empujan cada previsión.
+**CartRescue Marketplace** ayuda a los gestores de cuentas de marcas en marketplaces a detectar a tiempo **qué productos van a vender por debajo de lo esperado o pueden quedarse sin stock**, y a decidir dónde revisar el precio, la publicidad o la reposición. Compara las ventas de cada producto con su previsión, avisa cuando se desvía y explica qué factores empujan cada previsión.
 
 #### Problema y usuario
-- **Usuario objetivo:** responsables de programación, marketing y *pricing* de una plataforma de venta de entradas (por ejemplo, Fever) o de los organizadores que venden a través de ella.
-- **Necesidad y solución actual:** con muchas sesiones a la venta a la vez, es difícil detectar a tiempo cuáles no se van a llenar. A menudo se descubre cuando queda poco margen para actuar, y las decisiones de promoción y precio se toman con reglas fijas o con la experiencia. *Hipótesis: la contrastaremos con el equipo del colaborador y con 3-5 entrevistas a organizadores.*
+- **Usuario objetivo:** gestores de cuentas (*account managers*) de una agencia que lleva marcas en Amazon y otros marketplaces, y las propias marcas.
+- **Necesidad y solución actual:** cada gestor lleva muchos productos de varias marcas a la vez. Las caídas de ventas o las roturas de stock se detectan revisando informes a mano, a menudo cuando ya han costado ventas. *Hipótesis: la contrastaremos con el equipo de Brainy Commerce y con 3-5 entrevistas a gestores de cuentas.*
 
 #### Uso y valor
-Cada semana, el responsable abre el panel de sesiones a la venta y ve:
-1. **Ventas observadas:** entradas vendidas y porcentaje del aforo, a día de hoy.
-2. **Previsión** de las entradas vendidas el día del evento, con un rango.
-3. **Alerta** de las sesiones que van por detrás de lo normal a esa distancia del evento. Por ejemplo: *"Sábado 14: 38% vendido a 15 días; los eventos similares iban por el 55%. Riesgo alto de no llenar."*
-4. **Explicación** de los factores (tipo de evento, día, antelación, festivos, precio) y, si los datos lo permiten, el efecto estimado de un cambio de precio.
+Cada semana, el gestor abre el panel de sus cuentas y ve, para cada producto:
+1. **Ventas observadas:** unidades, ventas y conversión hasta la fecha.
+2. **Previsión** de las próximas semanas, con un rango.
+3. **Alertas** cuando un producto se desvía de su previsión o el stock no cubre la demanda prevista. Por ejemplo: *"Producto X: −28% de unidades frente a la previsión en las dos últimas semanas, coincidiendo con una subida de precio del 12%. Con el stock actual hay cobertura para 9 días."*
+4. **Explicación** de los factores: estacionalidad, precio, inversión publicitaria y campañas como Prime Day o Black Friday.
 
-Con eso decide dónde invertir en promoción y en qué sesiones probar otro precio. La herramienta **distingue siempre lo observado de lo previsto**.
+Con eso decide dónde actuar primero y tiene un argumento claro para hablar con la marca. La herramienta **distingue siempre lo observado de lo previsto**.
 
-**Momento de la predicción:** cada día de venta, con los datos disponibles hasta ese día y sin información posterior.
+**Momento de la predicción:** cada semana, con los datos disponibles hasta ese día y sin información posterior.
 
 #### Datos
 
-| Fuente | Qué aporta | Estado (28/10/2026) | Licencia | Limitaciones conocidas |
+| Fuente | Qué aporta | Estado (06/11/2026) | Licencia | Limitaciones conocidas |
 |---|---|---|---|---|
-| Datos de venta del colaborador (Fever u otro) | Ventas por sesión y día, aforo, precio y tipo de evento | Hipótesis: pendiente de la colaboración | Acuerdo con el colaborador, con confidencialidad si hace falta | Sin colaboración, la idea se descarta. Los datos no se subirán al repositorio |
-| Calendario laboral oficial (festivos) | Festivos y puentes | Hipótesis: fuente por localizar | Pendiente | Ninguna relevante |
-| [AEMET OpenData](https://opendata.aemet.es/) | Meteorología diaria | Hipótesis (requiere clave gratuita) | Pendiente | Solo útil en eventos al aire libre |
-| [Ayto. de Alcobendas, "Teatro Auditorio. Asistentes a espectáculos desde 2012"](https://datos.gob.es/es/catalogo/l01280066-teatro-auditorio-asistentes-a-espectaculos-desde-2012-historico1) | Asistencia final por espectáculo | Hipótesis: falta abrir la muestra | Pendiente de verificar | Solo para preparar el pipeline mientras llega el acceso. No tiene ventas por día ni precio |
+| Datos de cuentas cedidos por Brainy Commerce | Por producto y día: sesiones, unidades, ventas, conversión, precio, inventario, categoría e inversión publicitaria | Hipótesis: pendiente de la colaboración | Acuerdo con el colaborador, con confidencialidad si hace falta | Sin colaboración, la idea se descarta. Marcas y productos anonimizados. Los datos no se subirán al repositorio |
+| Calendario de campañas comerciales (Prime Day, Black Friday, rebajas) y festivos | Picos de demanda conocidos | Hipótesis: fuente por localizar | Pendiente | Calendario pequeño construido por el equipo, con la fuente de cada fecha |
 
-*Descartadas:* ICANE (agregada y sin licencia) y las agendas municipales (no guardan histórico; comprobado el 27/10/2026 con la de Madrid).
-
-*Privacidad:* se trabajará con datos agregados por sesión y día, sin datos de compradores.
+*Privacidad:* datos agregados por producto y día, sin datos de clientes finales.
 
 #### Primera versión o MVP
 - **Qué incluirá funcionando:**
-  1. Capa `gold` con una fila por sesión y día de venta.
-  2. Análisis estadístico de las curvas de venta por tipo de evento y antelación.
-  3. Modelo de las ventas finales a partir de las ventas acumuladas, comparado con un baseline (curva media por tipo de evento), usando validación temporal.
-  4. Panel de sesiones con sus alertas.
-  5. Asistente LLM que explica las previsiones citando los datos.
-- **Precio:** el módulo de efecto del precio solo entra si los datos traen precios con variación suficiente entre sesiones comparables. Si no, el producto se limita a previsión y alertas.
-- **Fuera:** venta de entradas propia, tiempo real, detección de bots e infraestructura distribuida.
-- **Criterio de éxito:** el modelo mejora al baseline en las semanas reservadas para la prueba, y el equipo del colaborador usa las alertas para decidir en una prueba breve.
+  1. Capa `gold` con una fila por producto y día.
+  2. Análisis estadístico de la estacionalidad y del efecto de las campañas comerciales en las ventas.
+  3. Modelo de previsión de ventas por producto, comparado con un baseline (ventas de las mismas semanas del año anterior o media móvil), usando validación temporal.
+  4. Panel de productos con previsión, alertas de desviación y cobertura de stock.
+  5. Asistente LLM que explica las alertas citando los datos.
+- **Opción alternativa, a elegir con el colaborador:** priorizar la inversión publicitaria, detectando qué campañas y palabras clave gastan sin retorno. Solo entra si el colaborador lo prefiere a la previsión de ventas.
+- **Fuera:** integración en tiempo real con las APIs de los marketplaces, cambio automático de precios o pujas e infraestructura distribuida.
+- **Criterio de éxito:** el modelo mejora al baseline en las semanas reservadas para la prueba, y un gestor de cuentas usa las alertas para decidir en una prueba breve.
 
 #### Viabilidad y dudas
-- **Depende por completo de la colaboración.** Hay que confirmar, antes de la Actividad 2, que se pueden obtener datos de venta por día y sesión y quién validará el producto.
-- **Sesgo de confusión en el precio:** los precios suelen cambiar precisamente porque la sesión va bien o mal, así que el efecto del precio puede no ser estimable. En ese caso el producto se limita a previsión y alertas, que ya aportan valor por sí solas.
+- **Depende por completo de la colaboración.** Hay que confirmar antes de la Actividad 2 qué datos se pueden obtener, con qué periodo y nivel de detalle, y quién validará el producto.
+- **Histórico y número de productos:** con menos de un año de datos no se puede separar bien la estacionalidad anual. Pediremos de 12 a 24 meses.
+- **Sesgo de confusión en precio y publicidad:** el precio y la inversión suelen cambiar precisamente cuando las ventas van bien o mal. Los mostraremos como factores asociados, no como causas.
 - **Confidencialidad:** si el acuerdo impide publicar los datos, acordaremos con el profesorado una vía de revisión y usaremos muestras anonimizadas o simuladas, declaradas como tales.
