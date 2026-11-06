@@ -194,3 +194,70 @@ Con eso decide dónde actuar primero y tiene un argumento claro para hablar con 
 - **Histórico y número de productos:** con menos de un año de datos no se puede separar bien la estacionalidad anual. Pediremos de 12 a 24 meses.
 - **Sesgo de confusión en precio y publicidad:** el precio y la inversión suelen cambiar precisamente cuando las ventas van bien o mal. Los mostraremos como factores asociados, no como causas.
 - **Confidencialidad:** si el acuerdo impide publicar los datos, acordaremos con el profesorado una vía de revisión y usaremos muestras anonimizadas o simuladas, declaradas como tales.
+
+---
+
+### Idea 5: Cuándo Enchufo — Planificador semanal de consumos aplazables para hogares con tarifa PVPC (nombre provisional)
+
+> **Idea con limitaciones ya medidas.** Los datos son públicos y accesibles, pero una primera prueba con precios reales (06/11/2026, ver *Viabilidad y dudas*) indica que **el valor añadido de la previsión a varios días es pequeño**. La mantenemos como propuesta para recibir feedback, declarando esa limitación.
+
+#### Título y descripción
+**Cuándo Enchufo** propone a los hogares con tarifa PVPC **cuándo hacer, en los próximos 7 días, los consumos que se pueden aplazar** (sobre todo cargar el coche eléctrico, y también el termo, el lavavajillas o la lavadora) para pagar menos, respetando sus plazos y horarios. Para el día siguiente usa los precios ya publicados; para los días posteriores, una previsión con su margen de error. Muestra el ahorro estimado en euros y explica por qué recomienda cada ventana.
+
+#### Problema y usuario
+- **Usuario objetivo:** hogares con tarifa PVPC con algún consumo aplazable. El perfil principal es el de **quien carga un coche eléctrico en casa**, porque es el único consumo doméstico en el que el ahorro es apreciable (ver *Viabilidad y dudas*).
+- **Necesidad y solución actual:** las apps y webs existentes muestran el precio de hoy y de mañana, pero no ayudan a decidir si conviene esperar unos días ni cuánto se ahorra. La mayoría de usuarios sigue una regla fija, como cargar siempre por la noche. *Hipótesis: la contrastaremos con 5-8 hogares con PVPC, de los que al menos 2 tengan coche eléctrico.*
+
+#### Uso y valor
+El usuario da de alta cada aparato una vez: consumo, duración, plazo y horas no permitidas. Recibe un **plan semanal**:
+1. **Ventana recomendada** para cada consumo. Lo que cae en el día siguiente se marca como **seguro**, porque usa precios publicados; lo que cae más allá, como **previsto**, con su margen de error.
+2. **Ahorro estimado en €** frente a su forma habitual de hacerlo.
+3. **Explicación**, por ejemplo: *"El jueves se espera más eólica y es festivo nacional; cargar el coche de 13:00 a 17:00 ahorra unos 1,20 € frente a hacerlo esta noche."*
+
+Cada noche, cuando REE publica los precios del día siguiente (sobre las 20:15-21:00), el plan se recalcula. Un asistente LLM responde preguntas sobre el plan usando el planificador y los datos, sin inventar cifras.
+
+**Momento de la predicción:** cada día, tras la publicación de los precios del día siguiente, con la información disponible hasta ese momento.
+
+#### Datos
+
+| Fuente | Qué aporta | Estado (06/11/2026) | Licencia | Limitaciones conocidas |
+|---|---|---|---|---|
+| [REData (Red Eléctrica)](https://www.ree.es/es/apidatos): precios de mercado en tiempo real | Precio PVPC hora a hora (variable objetivo) | **Confirmado (06/11/2026):** descargado 01/11/2025-31/10/2026, **8.760 horas sin huecos**. Acceso sin token | La página de la API solo indica que admite consultas GET. Pendiente de revisar el aviso legal de REE | El PVPC es **horario** (24 valores al día). El mercado spot ya es cuartohorario, pero no afecta a la tarifa de los hogares |
+| [ESIOS (Red Eléctrica)](https://www.esios.ree.es/) | Demanda y generación eólica y solar, reales y previstas | Hipótesis: el token se pide por email; pendiente a 06/11/2026 | Pendiente | Las previsiones de REE solo llegan al día siguiente |
+| Previsiones meteorológicas de viento e irradiación en varios puntos de la Península (p. ej. Open-Meteo, AEMET) | Variables para 2-7 días vista | Hipótesis: pendiente a 06/11/2026 | Pendiente | **Riesgo de fuga de información:** el archivo de previsiones históricas de Open-Meteo guarda solo las primeras horas de cada ejecución, no lo que se preveía a varios días. Pendiente comprobar si existe un histórico de previsiones con antelación real |
+| Festivos nacionales | Calendario | Hipótesis: fuente por localizar | Pendiente | — |
+
+*Nota:* el precio es único para toda la Península. El tiempo o los festivos de una ciudad concreta apenas influyen, así que el producto es nacional desde el principio.
+
+*Privacidad:* solo datos públicos agregados. Los datos de los hogares de la prueba (aparatos y horarios) se tratarán anonimizados.
+
+#### Primera versión o MVP
+- **Qué incluirá funcionando:**
+  1. Pipeline diario de REData/ESIOS y capa `gold` con una fila por hora.
+  2. Análisis estadístico: ¿cambia el precio en festivos y fines de semana? ¿Cuánto varía de un día a otro la ventana más barata?
+  3. Previsión horaria del PVPC de 2 a 7 días vista, con rangos (cuantiles), comparada con tres baselines: regla fija, repetir el último día conocido y media del mismo día de la semana. Se usará validación temporal.
+  4. Planificador sencillo: no es ML, elige para cada consumo la ventana de menor coste esperado dentro de sus condiciones.
+  5. Interfaz con el plan semanal, diferenciando lo seguro de lo previsto, y con el ahorro.
+  6. Asistente LLM que consulta el plan y lo explica.
+- **Qué queda fuera por ahora:** control de enchufes o cargadores, autoconsumo solar, tarifas del mercado libre, y los sistemas no peninsulares.
+- **Criterio de éxito:** en una simulación con el último año que use solo la información disponible en cada momento, **planificar con la previsión ahorra más que planificar solo con los precios ya publicados**. Además, los hogares de la prueba entienden la diferencia entre lo seguro y lo previsto.
+
+#### Viabilidad y dudas
+- **Limitación principal, medida el 06/11/2026** con el PVPC real del último año. Coste anual según la estrategia:
+
+| Consumo | Hora fija | Solo con precios ya publicados | Techo con previsión perfecta |
+|---|---|---|---|
+| Lavadora, 1 kWh por semana | 2,59 € | 2,31 € | 1,97 € (7 días) |
+| Coche, 15 kWh cada 2 días, a cualquier hora | 231,72 € | 196,54 € | 167,69 € (2 días) / 147,83 € (3 días) |
+| Coche, 15 kWh cada 2 días, solo de noche (0-8 h) | 362,82 € | 353,23 € | 332,76 € (2 días) / 322,90 € (3 días) / 297,98 € (7 días) |
+
+- **Qué significa:**
+  - En la lavadora no hay ahorro relevante.
+  - El mayor ahorro en el coche, unos 130 € al año, viene de **cargar al mediodía en vez de por la noche**, y eso es una regla fija que no necesita modelo.
+  - **Lo máximo que puede aportar la previsión es de 30-55 € al año por coche**, suponiendo que acierta siempre. Un modelo real se quedará por debajo.
+  - Según la misma prueba, la ventana más barata cambia respecto al día anterior el 63% de los días, y se desplaza 3 horas o más el 32%. La señal existe, pero su valor económico es limitado.
+- **Otras limitaciones:**
+  - Desde 2026, el 55% de la energía del PVPC se indexa a futuros y solo el 45% al mercado diario, y los peajes por periodos son fijos. Eso reduce la diferencia entre horas.
+  - Hay muchas apps que ya muestran el precio de hoy y mañana. Lo único diferencial sería el plan a varios días con el ahorro calculado.
+  - Las cuentas simplifican: la carga nocturna no cruza la medianoche y el consumo es fijo. No cambian el orden de magnitud.
+- **Qué haríamos si se elige:** presentar el resultado tal cual, midiendo cuánto aporta prever a varios días y en qué casos no merece la pena. Sería una conclusión válida, aunque hace el producto menos contundente que otras ideas.
