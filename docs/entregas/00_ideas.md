@@ -202,15 +202,15 @@ Con eso decide dónde actuar primero y tiene un argumento claro para hablar con 
 > **Idea con limitaciones ya medidas.** Los datos son públicos y accesibles, pero una primera prueba con precios reales (06/11/2026, ver *Viabilidad y dudas*) indica que **el valor añadido de la previsión a varios días es pequeño**. La mantenemos como propuesta para recibir feedback, declarando esa limitación.
 
 #### Título y descripción
-**Cuándo Enchufo** propone a los hogares con tarifa PVPC **cuándo hacer, en los próximos 7 días, los consumos que se pueden aplazar** (sobre todo cargar el coche eléctrico, y también el termo, el lavavajillas o la lavadora) para pagar menos, respetando sus plazos y horarios. Para el día siguiente usa los precios ya publicados; para los días posteriores, una previsión con su margen de error. Muestra el ahorro estimado en euros y explica por qué recomienda cada ventana.
+**Cuándo Enchufo** ayuda a los hogares con tarifa PVPC **a decidir cuándo hacer, en los próximos 7 días, los consumos que se pueden aplazar** (sobre todo cargar el coche eléctrico, y también el termo, el lavavajillas o la lavadora) para pagar menos, respetando sus plazos y horarios. Para el día siguiente usa los precios ya publicados; para los días posteriores, una previsión con su margen de error. Muestra el ahorro estimado en euros y explica por qué recomienda cada ventana.
 
 #### Problema y usuario
-- **Usuario objetivo:** hogares con tarifa PVPC con algún consumo aplazable. El perfil principal es el de **quien carga un coche eléctrico en casa**, porque es el único consumo doméstico en el que el ahorro es apreciable (ver *Viabilidad y dudas*).
-- **Necesidad y solución actual:** las apps y webs existentes muestran el precio de hoy y de mañana, pero no ayudan a decidir si conviene esperar unos días ni cuánto se ahorra. La mayoría de usuarios sigue una regla fija, como cargar siempre por la noche. *Hipótesis: la contrastaremos con 5-8 hogares con PVPC, de los que al menos 2 tengan coche eléctrico.*
+- **Usuario objetivo:** hogares con tarifa PVPC con algún consumo aplazable. El perfil principal es el de **quien carga un coche eléctrico en casa**, porque es el consumo doméstico en el que el ahorro es más  apreciable (ver *Viabilidad y dudas*).
+- **Necesidad y solución actual:** muchas de las apps y webs existentes permiten consultar los precios de hoy y del día siguiente, pero no necesariamente ayudan a decidir si conviene esperar unos días para realizar un consumo ni cuánto podría ahorrarse. Algunos usuarios pueden seguir estrategias fijas, como cargar siempre por la noche. *Hipótesis: la contrastaremos con 5-8 hogares con PVPC, de los que al menos 2 tengan coche eléctrico.*
 
 #### Uso y valor
 El usuario da de alta cada aparato una vez: consumo, duración, plazo y horas no permitidas. Recibe un **plan semanal**:
-1. **Ventana recomendada** para cada consumo. Lo que cae en el día siguiente se marca como **seguro**, porque usa precios publicados; lo que cae más allá, como **previsto**, con su margen de error.
+1. **Ventana recomendada** para cada consumo. Las recomendaciones para el día siguiente se basan en precios PVPC ya publicados, por lo que se consideran conocidas. Para los días posteriores se utilizan precios estimados por el modelo, acompañados de un intervalo de incertidumbre.
 2. **Ahorro estimado en €** frente a su forma habitual de hacerlo.
 3. **Explicación**, por ejemplo: *"El jueves se espera más eólica y es festivo nacional; cargar el coche de 13:00 a 17:00 ahorra unos 1,20 € frente a hacerlo esta noche."*
 
@@ -223,11 +223,11 @@ Cada noche, cuando REE publica los precios del día siguiente (sobre las 20:15-2
 | Fuente | Qué aporta | Estado (06/11/2026) | Licencia | Limitaciones conocidas |
 |---|---|---|---|---|
 | [REData (Red Eléctrica)](https://www.ree.es/es/apidatos): precios de mercado en tiempo real | Precio PVPC hora a hora (variable objetivo) | **Confirmado (06/11/2026):** descargado 01/11/2025-31/10/2026, **8.760 horas sin huecos**. Acceso sin token | La página de la API solo indica que admite consultas GET. Pendiente de revisar el aviso legal de REE | El PVPC es **horario** (24 valores al día). El mercado spot ya es cuartohorario, pero no afecta a la tarifa de los hogares |
-| [ESIOS (Red Eléctrica)](https://www.esios.ree.es/) | Demanda y generación eólica y solar, reales y previstas | Hipótesis: el token se pide por email; pendiente a 06/11/2026 | Pendiente | Las previsiones de REE solo llegan al día siguiente |
+| [ESIOS (Red Eléctrica)](https://www.esios.ree.es/) | Datos del mercado eléctrico, incluyendo precios spot y PVPC. | **Confirmado (07/11/2026):** token de acceso obtenido y primeras descargas de datos realizadas. | Pendiente | Las previsiones de REE solo llegan al día siguiente |
 | Previsiones meteorológicas de viento e irradiación en varios puntos de la Península (p. ej. Open-Meteo, AEMET) | Variables para 2-7 días vista | Hipótesis: pendiente a 06/11/2026 | Pendiente | **Riesgo de fuga de información:** el archivo de previsiones históricas de Open-Meteo guarda solo las primeras horas de cada ejecución, no lo que se preveía a varios días. Pendiente comprobar si existe un histórico de previsiones con antelación real |
 | Festivos nacionales | Calendario | Hipótesis: fuente por localizar | Pendiente | — |
 
-*Nota:* el precio es único para toda la Península. El tiempo o los festivos de una ciudad concreta apenas influyen, así que el producto es nacional desde el principio.
+*Nota:* el precio PVPC es común para los consumidores peninsulares acogidos a esta tarifa, por lo que el producto puede plantearse inicialmente para todo el territorio peninsular. Las variables meteorológicas y de calendario se estudiarán a escala adecuada para comprobar si aportan capacidad predictiva.
 
 *Privacidad:* solo datos públicos agregados. Los datos de los hogares de la prueba (aparatos y horarios) se tratarán anonimizados.
 
@@ -252,9 +252,9 @@ Cada noche, cuando REE publica los precios del día siguiente (sobre las 20:15-2
 | Coche, 15 kWh cada 2 días, solo de noche (0-8 h) | 362,82 € | 353,23 € | 332,76 € (2 días) / 322,90 € (3 días) / 297,98 € (7 días) |
 
 - **Qué significa:**
-  - En la lavadora no hay ahorro relevante.
-  - El mayor ahorro en el coche, unos 130 € al año, viene de **cargar al mediodía en vez de por la noche**, y eso es una regla fija que no necesita modelo.
-  - **Lo máximo que puede aportar la previsión es de 30-55 € al año por coche**, suponiendo que acierta siempre. Un modelo real se quedará por debajo.
+  - En el escenario analizado, el ahorro potencial de la lavadora es reducido debido a su bajo consumo energético y frecuencia de uso. Por ello, no parece el caso de uso prioritario.
+  - Los primeros resultados sugieren que una parte importante del ahorro potencial del coche eléctrico podría conseguirse mediante una estrategia fija de carga en las horas más económicas, sin necesidad de utilizar modelos predictivos.
+  - En este primer análisis, el ahorro adicional máximo que podría aportar la previsión se sitúa aproximadamente entre 30 y 55 € al año por coche, suponiendo que se conocieran perfectamente los precios futuros. Un modelo real previsiblemente obtendría un ahorro inferior.
   - Según la misma prueba, la ventana más barata cambia respecto al día anterior el 63% de los días, y se desplaza 3 horas o más el 32%. La señal existe, pero su valor económico es limitado.
 - **Otras limitaciones:**
   - Desde 2026, el 55% de la energía del PVPC se indexa a futuros y solo el 45% al mercado diario, y los peajes por periodos son fijos. Eso reduce la diferencia entre horas.
