@@ -199,7 +199,7 @@ Con eso decide dónde actuar primero y tiene un argumento claro para hablar con 
 
 ### Idea 5: Cuándo Enchufo — Planificador semanal de consumos aplazables para hogares con tarifa PVPC (nombre provisional)
 
-> **Idea con limitaciones ya medidas.** Los datos son públicos y accesibles, pero una primera prueba con precios reales (06/11/2026, ver *Viabilidad y dudas*) indica que **el valor añadido de la previsión a varios días es pequeño**. La mantenemos como propuesta para recibir feedback, declarando esa limitación.
+> **Idea con limitaciones ya medidas.** Los datos son públicos y accesibles, pero una simulación con precios reales (corregida el 09/11/2026, ver *Viabilidad y dudas*) indica que **el valor añadido de la previsión a varios días es pequeño**. La mantenemos como propuesta para recibir feedback, declarando esa limitación.
 
 #### Título y descripción
 **Cuándo Enchufo** ayuda a los hogares con tarifa PVPC **a decidir cuándo hacer, en los próximos 7 días, los consumos que se pueden aplazar** (sobre todo cargar el coche eléctrico, y también el termo, el lavavajillas o la lavadora) para pagar menos, respetando sus plazos y horarios. Para el día siguiente usa los precios ya publicados; para los días posteriores, una previsión con su margen de error. Muestra el ahorro estimado en euros y explica por qué recomienda cada ventana.
@@ -240,22 +240,29 @@ Cada noche, cuando REE publica los precios del día siguiente (sobre las 20:15-2
   5. Interfaz con el plan semanal, diferenciando lo seguro de lo previsto, y con el ahorro.
   6. Asistente LLM que consulta el plan y lo explica.
 - **Qué queda fuera por ahora:** control de enchufes o cargadores, autoconsumo solar, tarifas del mercado libre, y los sistemas no peninsulares.
-- **Criterio de éxito:** en una simulación con el último año que use solo la información disponible en cada momento, **planificar con la previsión ahorra más que planificar solo con los precios ya publicados**. Además, los hogares de la prueba entienden la diferencia entre lo seguro y lo previsto.
+- **Criterio de éxito:** en una simulación con el último año que use solo la información disponible en cada momento, **planificar con la previsión ahorra más que la mejor regla sin previsión**, con la misma energía y los mismos plazos. Además, los hogares de la prueba entienden la diferencia entre lo seguro y lo previsto.
 
 #### Viabilidad y dudas
-- **Limitación principal, medida el 06/11/2026** con el PVPC real del último año. Coste anual según la estrategia:
+- **Limitación principal, medida con el PVPC real del último año** (01/11/2025-31/10/2026; simulación corregida el 09/11/2026). **Todas las estrategias sirven la misma energía y respetan el mismo plazo:** cada consumo debe hacerse dentro de su bloque de días, y el último día del bloque se hace sí o sí. Cada día solo se conocen los precios de ese día y del pasado. Coste anual según la estrategia:
 
-| Consumo | Hora fija | Solo con precios ya publicados | Techo con previsión perfecta |
-|---|---|---|---|
-| Lavadora, 1 kWh por semana | 2,59 € | 2,31 € | 1,97 € (7 días) |
-| Coche, 15 kWh cada 2 días, a cualquier hora | 231,72 € | 196,54 € | 167,69 € (2 días) / 147,83 € (3 días) |
-| Coche, 15 kWh cada 2 días, solo de noche (0-8 h) | 362,82 € | 353,23 € | 332,76 € (2 días) / 322,90 € (3 días) / 297,98 € (7 días) |
+| Consumo (misma energía y plazo en todas las columnas) | Hora fija | Mejor ventana del primer día | **Regla sin previsión** (umbral con precios pasados) | **Previsión ingenua** (media de 7 días) | Techo teórico (precios futuros perfectos) |
+|---|---|---|---|---|---|
+| Coche, 15 kWh, plazo 2 días, a cualquier hora | 235,67 € | 193,09 € | 177,00 € | 177,41 € | 164,34 € |
+| Coche, 15 kWh, plazo 2 días, solo de noche (0-8 h) | 366,92 € | 363,77 € | 357,11 € | 358,37 € | 344,02 € |
+| Coche, 22,5 kWh, plazo 3 días, a cualquier hora | 239,33 € | 195,50 € | 165,80 € | 166,37 € | 144,13 € |
+| Coche, 22,5 kWh, plazo 3 días, solo de noche (0-8 h) | 370,02 € | 366,54 € | 347,98 € | 345,99 € | 333,54 € |
+| Lavadora, 1 kWh, plazo 7 días (8-22 h) | 2,41 € | 2,25 € | 2,21 € | 2,23 € | 1,95 € |
+
+*Hora fija:* 13-17 h para el coche a cualquier hora, 2-6 h de noche y 14-16 h la lavadora. *Regla sin previsión:* hacer el consumo el día que su mejor ventana esté por debajo del percentil 30 de los 28 días anteriores. *Previsión ingenua:* esperar si se prevé un día más barato en lo que queda de plazo. La **columna del techo no es un ahorro alcanzable**: supone conocer los precios futuros, así que solo marca el máximo teórico.
 
 - **Qué significa:**
-  - En el escenario analizado, el ahorro potencial de la lavadora es reducido debido a su bajo consumo energético y frecuencia de uso. Por ello, no parece el caso de uso prioritario.
-  - Los primeros resultados sugieren que una parte importante del ahorro potencial del coche eléctrico podría conseguirse mediante una estrategia fija de carga en las horas más económicas, sin necesidad de utilizar modelos predictivos.
-  - En este primer análisis, el ahorro adicional máximo que podría aportar la previsión se sitúa aproximadamente entre 30 y 55 € al año por coche, suponiendo que se conocieran perfectamente los precios futuros. Un modelo real previsiblemente obtendría un ahorro inferior.
-  - Según la misma prueba, la ventana más barata cambia respecto al día anterior el 63% de los días, y se desplaza 3 horas o más el 32%. La señal existe, pero su valor económico es limitado.
+  - En el escenario analizado, el ahorro potencial de la lavadora es muy reducido (céntimos al año) debido a su bajo consumo energético y frecuencia de uso. Por ello, no parece el caso de uso prioritario.
+  - En el coche eléctrico, la mayor parte del ahorro se consigue con dos estrategias que no necesitan modelos predictivos: cargar en las horas centrales del día en lugar de por la noche (unos 130 € al año) y elegir el día de carga con una regla sencilla basada en precios pasados (unos 60 € adicionales).
+  - Una previsión ingenua no mejora a esa regla sin previsión (diferencias de entre −2 y +1 € al año).
+  - El ahorro adicional máximo que podría aportar un modelo se sitúa aproximadamente entre 12 y 22 € al año por coche, que es la diferencia entre la regla sin previsión y el techo teórico. Un modelo real previsiblemente obtendría solo una parte.
+  - Un primer análisis (06/11/2026) estimaba entre 30 y 55 €, pero no aplicaba los mismos plazos a todas las estrategias ni incluía una regla sin previsión. Esta versión lo sustituye.
+  - La ventana más barata cambia respecto al día anterior el 63% de los días, y se desplaza 3 horas o más el 32%. La señal existe, pero su valor económico es limitado.
+  - Para elegir esta idea habría que comprobar con hogares reales que valoran ese ahorro y la comodidad del plan; añadir predicción no basta por sí solo.
 - **Otras limitaciones:**
   - Desde 2026, el 55% de la energía del PVPC se indexa a futuros y solo el 45% al mercado diario, y los peajes por periodos son fijos. Eso reduce la diferencia entre horas.
   - Hay muchas apps que ya muestran el precio de hoy y mañana. Lo único diferencial sería el plan a varios días con el ahorro calculado.
