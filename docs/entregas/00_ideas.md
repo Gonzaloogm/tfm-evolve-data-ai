@@ -19,30 +19,30 @@ Cada actividad tendrá un responsable principal y un revisor, indicados en su fi
 
 ## 2. Propuestas de Producto
 
-### Idea 1: RevPAR Pulse — Monitor de Precios Anunciados y Disponibilidad para Alojamientos Urbanos
+### Idea 1: RevPAR Pulse — Explorador de Precios Anunciados y Disponibilidad para Alojamientos Urbanos
 
 #### Título y descripción
-**RevPAR Pulse** es una herramienta para gestores de alojamientos turísticos de corta estancia en Madrid. Les muestra cómo evolucionan los **precios anunciados** y la **disponibilidad** de los anuncios comparables de su barrio, les avisa de las fechas en que la disponibilidad cae antes de lo habitual y les dice dónde queda su precio frente a esos comparables. **No estima reservas ni ingresos**, porque los datos no contienen reservas.
+**RevPAR Pulse** es un explorador descriptivo para gestores de alojamientos turísticos de corta estancia en Madrid. Muestra la **disponibilidad** de los anuncios comparables de su barrio para las próximas fechas, según el último corte publicado, señala las fechas con menos disponibilidad de la habitual y sitúa el **precio anunciado** de su alojamiento frente al de esos comparables. **No predice reservas ni recomienda una tarifa óptima**: los datos no contienen reservas y solo traen un precio por anuncio, no un precio por noche.
 
 #### Problema y usuario
 - **Usuario objetivo:** Pequeños propietarios y gestores profesionales (*property managers*) de entre 3 y 30 apartamentos turísticos en Madrid.
-- **Necesidad y solución actual:** Para fijar sus tarifas con semanas de antelación necesitan saber qué fechas se están cerrando antes en su zona y si su precio está por encima o por debajo del mercado. Hoy lo hacen revisando a mano los anuncios vecinos en las plataformas, fecha a fecha, o con tarifas estáticas por temporada en Excel. *Hipótesis: la contrastaremos con 3-5 entrevistas a gestores.*
+- **Necesidad y solución actual:** Para revisar sus tarifas necesitan saber qué fechas se están cerrando antes en su zona y si su precio está por encima o por debajo del de anuncios parecidos. Hoy lo hacen revisando a mano los anuncios vecinos en las plataformas o con tarifas estáticas por temporada en Excel. *Hipótesis: la contrastaremos con 3-5 entrevistas a gestores.*
 
 #### Uso y valor
-Cuando el gestor planifica las próximas semanas, abre el calendario de su barrio y elige su tipo de alojamiento (por ejemplo, piso entero de 2-4 plazas). Para cada fecha ve:
-1. **Disponibilidad de los comparables:** porcentaje de anuncios comparables que ya no están disponibles, frente a lo habitual con la misma antelación.
-2. **Alerta de fecha tensionada** cuando la disponibilidad cae claramente por debajo de lo habitual.
-3. **Precio anunciado de los comparables** (mediana y rango) y **la posición de su precio** dentro de ese rango.
-4. **Explicación**, por ejemplo: *"Sábado 14: solo queda disponible el 22% de los pisos comparables de tu barrio, frente al 48% habitual a 30 días vista. Es festivo local. Tu precio (95 €) está en el 30% más barato de los comparables (mediana: 120 €)."*
+Cuando el gestor revisa sus tarifas, abre la vista de su barrio y elige su tipo de alojamiento (por ejemplo, piso entero de 2-4 plazas). Ve dos cosas:
+1. **Calendario de disponibilidad de los comparables** (último corte publicado): para cada fecha, el porcentaje de anuncios comparables que aparecen como no disponibles, frente a lo habitual para esa antelación en el mismo corte. Las fechas claramente por encima se marcan como **fechas con poca disponibilidad**. Es una foto del momento del corte, no una previsión.
+2. **Posición de su precio:** el precio anunciado de los comparables (mediana y rango) y dónde queda el suyo. Es un precio por anuncio, no por fecha.
 
-Con eso el gestor decide si sube el precio o lo mantiene. El producto informa y la decisión es suya. Un asistente LLM responde preguntas sobre las fechas y los barrios, citando los datos que usa.
+Ejemplo: *"Según el corte del 17/09, para el sábado 14 solo aparece disponible el 22% de los pisos comparables de tu barrio, frente al 48% habitual para esa antelación. Es festivo local. Tu precio anunciado (95 €) está entre el 30% más barato de los comparables (mediana: 120 €)."*
+
+Con eso el gestor revisa su precio. El producto informa y la decisión es suya; no recomienda una tarifa. Un asistente LLM responde preguntas sobre las fechas y los barrios, citando los datos que usa.
 
 #### Datos
 - **Fuente 1 (Precios anunciados y disponibilidad):** *Inside Airbnb — Madrid*. `listings.csv` aporta el precio anunciado, las coordenadas, el barrio y los atributos del inmueble; `calendar.csv` aporta la disponibilidad de los 365 días siguientes a cada corte.
   - *Enlaces:* [descarga](https://insideairbnb.com/get-the-data/) · [políticas de uso](https://insideairbnb.com/data-policies/)
   - *Estado y licencia:* **Acceso y licencia confirmados (27/10/2026).** La [página de descarga](https://insideairbnb.com/get-the-data/) indica literalmente *"This data is licensed under a Creative Commons Attribution 4.0 International License."* Para Madrid ofrece cuatro cortes trimestrales de descarga libre (14/12/2025, 24/03/2026, 20/06/2026 y 17/09/2026), es decir, *"generally quarterly data for the last 12 months"*. Los cortes anteriores hay que pedirlos con un *Archived Data Request*. Sus [políticas de uso](https://insideairbnb.com/data-policies/) piden citar la fuente y no republicar los datos, así que no se subirán al repositorio: solo el código y las instrucciones de descarga.
   - *Contenido:* **confirmado (09/11/2026)** con los calendarios de los cortes del 20/06/2026 y del 17/09/2026 y los anuncios del 17/09/2026 (notas en `docs/notas_fuentes/idea1_gonzalo.md`). Cada fila de `calendar` es un anuncio y una noche: 8,4 millones de filas, unos 23.000 anuncios y 365 noches por corte, sin nulos ni duplicados. **`calendar` ya no incluye columna de precio**; solo `listing_id`, `date`, `available`, `minimum_nights` y `maximum_nights`. El 47,9% de las noches aparece como no disponible.
-  - *Privacidad:* `listings.csv` incluye el nombre de pila y el identificador del anfitrión. No se necesitan y se excluirán en silver. Los campos exactos se confirmarán con la muestra (pendiente a 27/10/2026).
+  - *Privacidad:* `listings.csv` incluye el nombre de pila y el identificador del anfitrión (`host_name`, `host_id`; comprobado el 09/11/2026). No se necesitan y se excluirán en silver.
   - *Limitación asumida:* `calendar.csv` indica si una noche está **disponible o no**, no si fue **reservada**, porque puede ser un bloqueo del anfitrión. Por eso el producto habla siempre de **disponibilidad**, nunca de ocupación ni de reservas.
   - *Cómo usaremos los cortes:* cada corte mira 365 días hacia delante, así que la misma noche aparece en varios cortes con distinta antelación. **Hallazgo (09/11/2026):** entre los cortes de junio y septiembre, el 22,6% de las noches que estaban no disponibles pasan a estar disponibles, y entre el 12% y el 14% de los anuncios están bloqueados todo el año. Esto confirma que "no disponible" mezcla reservas y bloqueos del anfitrión.
 - **Fuente 2 (Agenda municipal):** *Portal de Datos Abiertos del Ayuntamiento de Madrid — Agenda de Actividades y Eventos* (`300107-0-agenda-actividades-eventos`).
@@ -58,17 +58,17 @@ Con eso el gestor decide si sube el precio o lo mantiene. El producto informa y 
 
 #### Primera versión o MVP
 - **Qué incluirá funcionando:**
-  1. Pipeline reproducible y capa `gold` en SQL con una fila por barrio, tipo de alojamiento, noche y corte: disponibilidad, antelación, precio anunciado (mediana y percentiles) y festivo.
-  2. Análisis estadístico de si la disponibilidad y el precio anunciado difieren en festivos y fines de semana frente al resto de días.
-  3. Modelo que predice la disponibilidad del barrio para una noche con 30 días de antelación, comparado con un baseline estacional (mismo día de la semana y mes) mediante validación temporal entre cortes.
-  4. Interfaz web con el calendario, las alertas de fechas tensionadas y la posición del precio del gestor.
+  1. Pipeline reproducible y capa `gold` en SQL con dos tablas: una fila por barrio, tipo de alojamiento, noche y corte (disponibilidad, antelación y festivo) y una fila por anuncio y corte (precio anunciado y atributos).
+  2. Análisis estadístico de si la disponibilidad difiere en festivos y fines de semana, y de cómo varía el precio anunciado entre barrios y tipos de alojamiento.
+  3. Experimento de ML de **precio de referencia**: estima el precio anunciado típico de un anuncio según sus características (barrio, tipo, capacidad…), comparado con un baseline (mediana del barrio y tipo). Sirve para situar el precio del gestor frente a anuncios parecidos; **no es una tarifa óptima ni predice reservas**.
+  4. Interfaz web con el calendario de disponibilidad de los comparables, las fechas con poca disponibilidad y la posición del precio del gestor.
   5. Asistente LLM que explica las fechas y los barrios citando los datos usados.
-- **Qué queda fuera por ahora:** estimación de reservas, ingresos o tarifa óptima (no hay datos de reservas), grandes eventos, integración con las APIs de Airbnb/Booking y procesamiento en tiempo real.
+- **Qué queda fuera:** previsión de disponibilidad o de reservas (los cortes trimestrales no la sostienen), precios por noche (solo hay precio por anuncio), estimación de ingresos o tarifa óptima, grandes eventos, integración con las APIs de Airbnb/Booking y procesamiento en tiempo real.
 
 #### Viabilidad y dudas
-- **Principal dificultad (comprobada el 09/11/2026):** con cortes cada tres meses, una misma noche solo se observa una vez por trimestre. No se puede seguir cómo cambia su disponibilidad entre 30 días antes y el día de la estancia, así que **los cuatro cortes no sostienen una previsión a 30 días**. Haría falta una frecuencia mensual o mayor, que no está disponible de forma libre. Sin ella, el producto se queda en análisis descriptivo de precios anunciados y disponibilidad, con alertas por reglas.
+- **Principal dificultad (comprobada el 09/11/2026):** con cortes cada tres meses, una misma noche solo se observa una vez por trimestre. No se puede seguir cómo cambia su disponibilidad entre 30 días antes y el día de la estancia, así que **los cuatro cortes no sostienen una previsión a 30 días**. Haría falta una frecuencia mensual o mayor, que no está disponible de forma libre. Por eso el MVP es descriptivo y no incluye ningún modelo de previsión de disponibilidad.
 - **Precio (comprobado el 09/11/2026):** **es por anuncio, no por noche.** `listings.csv` trae un único `price` por anuncio (vacío en el 18,7%; mediana de 151 €) y una cotización (`price_quote_*`) para una sola estancia de fechas y duración variables según el anuncio. No permite construir una serie de precio por noche, así que el precio solo sirve para comparar anuncios entre sí en cada corte.
-- **Validación con usuarios:** concertar al menos una prueba de la tarea "decidir el precio de las próximas 4 semanas" con un gestor real (pendiente a 27/10/2026).
+- **Validación con usuarios:** concertar al menos una prueba con un gestor real de la tarea "revisar mi precio frente a anuncios parecidos y ver qué fechas se están cerrando en mi barrio" (pendiente a 09/11/2026).
 
 ---
 
@@ -243,7 +243,7 @@ Cada noche, cuando REE publica los precios del día siguiente (sobre las 20:15-2
 - **Criterio de éxito:** en una simulación con el último año que use solo la información disponible en cada momento, **planificar con la previsión ahorra más que la mejor regla sin previsión**, con la misma energía y los mismos plazos. Además, los hogares de la prueba entienden la diferencia entre lo seguro y lo previsto.
 
 #### Viabilidad y dudas
-- **Limitación principal, medida con el PVPC real del último año** (01/11/2025-31/10/2026; simulación corregida el 09/11/2026). **Todas las estrategias sirven la misma energía y respetan el mismo plazo:** cada consumo debe hacerse dentro de su bloque de días, y el último día del bloque se hace sí o sí. Cada día solo se conocen los precios de ese día y del pasado. Coste anual según la estrategia:
+- **Limitación principal, medida con el PVPC real del último año** (01/11/2025-31/10/2026; simulación corregida el 09/11/2026). **Todas las estrategias sirven la misma energía y respetan el mismo plazo:** cada consumo debe hacerse dentro de su bloque de días, y el último día del bloque se hace sí o sí. **Todas las estrategias, salvo el techo, disponen en cada fecha de la misma información:** la decisión de cada día se toma con los precios de ese día, ya publicados por REE la tarde anterior, y con todos los precios pasados. Ninguna usa precios todavía no publicados. Coste anual según la estrategia:
 
 | Consumo (misma energía y plazo en todas las columnas) | Hora fija | Mejor ventana del primer día | **Regla sin previsión** (umbral con precios pasados) | **Previsión ingenua** (media de 7 días) | Techo teórico (precios futuros perfectos) |
 |---|---|---|---|---|---|
