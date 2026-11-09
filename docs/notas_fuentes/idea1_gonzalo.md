@@ -33,7 +33,43 @@ Los datos no se suben al repositorio. Aquí solo van las notas y los enlaces de 
 | Ficheros del último corte | `https://data.insideairbnb.com/spain/comunidad-de-madrid/madrid/2026-09-17/data/listings.csv.gz` y `.../2026-09-17/data/calendar.csv.gz` |
 | Cortes disponibles | Cuatro de descarga libre: 14/12/2025, 24/03/2026, 20/06/2026 y 17/09/2026. La página dice "generally quarterly data for the last 12 months. For additional data, make an archived data request." |
 | Licencia (literal) | "This data is licensed under a Creative Commons Attribution 4.0 International License." Las políticas añaden que hay que atribuir y citar los datos, no republicarlos y descargarlos una sola vez. |
-| Qué es una fila / nulos / precio | **Pendiente.** No se ha podido descargar automáticamente porque el servidor bloquea el acceso desde la herramienta. Hay que descargarlo a mano y comprobar: qué representa una fila de `calendar` (alojamiento × fecha), si `price` viene vacío, el reparto de `available` y si el precio varía entre cortes. |
+| Qué es una fila / nulos / precio | **Comprobado el 09/11/2026** (ver sección siguiente). Una fila es un anuncio y una noche. Sin nulos. **Sin columna de precio en `calendar`**: el precio es por anuncio, en `listings`. |
 | Contradicciones con la ficha | Con cuatro cortes trimestrales, el histórico libre es corto: un año, con una foto cada tres meses. Para más profundidad hay que pedir los datos archivados. |
 
-**Estado:** el acceso y la licencia están comprobados, pero el contenido sigue en hipótesis hasta inspeccionar `calendar.csv.gz`.
+**Estado:** acceso, licencia y contenido comprobados (09/11/2026).
+
+---
+
+## Inside Airbnb — inspección de la muestra (09/11/2026)
+
+**Ficheros descargados el 09/11/2026** (en `data/raw/`, que no se versiona): `calendar` de los cortes del 20/06/2026 y del 17/09/2026, y `listings` del corte del 17/09/2026.
+
+| Punto | `calendar` 17/09/2026 | `calendar` 20/06/2026 |
+|---|---|---|
+| Qué es una fila | Un anuncio y una noche | Igual |
+| Filas × columnas | 8.438.629 × 5 | 8.334.782 × 5 |
+| Columnas | `listing_id`, `date`, `available`, `minimum_nights`, `maximum_nights` | Igual |
+| Anuncios / noches | 23.109 / 19/09/2026 → 21/09/2027 | 22.835 / 20/06/2026 → 01/07/2027 |
+| Nulos y duplicados (anuncio + noche) | 0 / 0 | 0 / 0 |
+| Noches no disponibles | 47,9% | 47,3% |
+| Anuncios no disponibles todo el año | 13,8% | 12,3% |
+
+**No disponibilidad según la antelación (corte del 17/09/2026):** 83,2% a ≤7 días, 75,4% a 8-30 días, 47,8% a 31-90 días, 39,0% a 91-180 días y 47,7% a más de 180 días. La subida en el tramo más lejano apunta a anfitriones que cierran el calendario a largo plazo, no a reservas.
+
+**Comparación entre cortes:** hay 5.793.043 noches (de 20.936 anuncios) presentes en los dos cortes. De las noches no disponibles en junio, el **22,6% pasa a estar disponible** en septiembre. Una reserva no suele deshacerse en esa proporción, así que "no disponible" mezcla reservas y bloqueos.
+
+**`listings` 17/09/2026:** 23.109 anuncios × 90 columnas.
+- `price`: vacío en el 18,7%; mediana de 151 € (p10: 54 €, p90: 346 €).
+- `price_quote_*`: una sola cotización por anuncio, para una estancia de fechas y duración variables (1, 2, 3, 30 noches…).
+- Por tanto, **el precio es por anuncio, no por noche**.
+- Tipo de alojamiento: el 70% son viviendas enteras. Hay 128 barrios en 21 distritos. `license` está vacío en el 47,2%.
+- Incluye `host_name` y `host_id`, que se excluirán en silver.
+
+**Respuestas al feedback del profesor:**
+- **¿El precio es por noche o por anuncio?** Por anuncio. `calendar` ya no trae precio.
+- **¿Bastan cuatro cortes para prever a 30 días?** No. Con un corte cada tres meses no se puede seguir una misma noche desde 30 días antes hasta la estancia. Haría falta una frecuencia al menos mensual.
+
+**Contradicciones con la ficha:**
+1. La ficha contaba con `price` en `calendar`, y ya no existe.
+2. El modelo de disponibilidad a 30 días no es viable con los datos libres.
+3. La proporción de noches que se liberan entre cortes refuerza que la disponibilidad no es un buen sustituto de las reservas.
