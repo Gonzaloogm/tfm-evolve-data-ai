@@ -2,14 +2,14 @@
 
 Análisis exploratorio de licitaciones publicadas en la Plataforma de Contratación del Sector Público (PLACSP), a partir de sus ficheros mensuales de la sindicación 643. Estudia resultados de contratación, número de ofertas, CPV de servicios TI y software, posibles relicitaciones y expedientes sin adjudicación registrada.
 
-Este repositorio contiene un *spike* analítico reproducible; no es todavía una aplicación de producción. Los métodos, resultados y limitaciones están documentados en [S2: septiembre de 2026](docs/S2.md) y [S3: octubre de 2026](docs/S3.md).
+Esta carpeta contiene un análisis exploratorio reproducible de la idea 3 (Radar de Oportunidades) del [proyecto transversal](../README.md); no es todavía una aplicación. Se mantiene como subproyecto separado mientras el equipo decide la idea definitiva (ver [`docs/entregas/00_ideas.md`](../docs/entregas/00_ideas.md)). Los métodos, resultados y limitaciones están documentados en [S2: septiembre de 2026](docs/S2.md) y [S3: octubre de 2026](docs/S3.md).
 
 ## Estructura
 
 - `src/radar_oportunidades/analizar_643.py`: parser y análisis de los ZIP mensuales.
-- `data/`: ubicación local para los ZIP de entrada y los resultados. Todo su contenido está excluido de Git.
+- `data/`: ubicación local para los ZIP de entrada y los resultados. Se crea al guardar ahí el primer ZIP y todo su contenido está excluido de Git (`radar-oportunidades/data/` en el `.gitignore`).
 - `docs/`: metodología, resultados, limitaciones y decisiones pendientes.
-- `tests/`: reservado para pruebas; actualmente no contiene una suite.
+- Prueba preliminar de concurrencia en lotes TI (feed Atom, 05-08/11/2026): [`../docs/notas_fuentes/radar_prueba_concurrencia.md`](../docs/notas_fuentes/radar_prueba_concurrencia.md).
 
 ## Requisitos
 
@@ -27,12 +27,22 @@ No es necesario subir el ZIP a Git.
 
 ## Ejecución
 
-Desde la raíz de este repositorio, ejecuta el script indicando la ruta del ZIP y la carpeta donde guardar los resultados:
+Desde esta carpeta (`radar-oportunidades/`), ejecuta el script indicando la ruta del ZIP y la carpeta donde guardar los resultados.
+
+En Windows (PowerShell):
 
 ```powershell
 python ".\src\radar_oportunidades\analizar_643.py" `
   ".\data\licitacionesPerfilesContratanteCompleto3_AAAAMM.zip" `
   ".\data\salida_AAAAMM"
+```
+
+En macOS o Linux:
+
+```bash
+python3 src/radar_oportunidades/analizar_643.py \
+  data/licitacionesPerfilesContratanteCompleto3_AAAAMM.zip \
+  data/salida_AAAAMM
 ```
 
 Sustituye `AAAAMM` por el año y mes del archivo. Por ejemplo, para octubre de 2026:
@@ -43,7 +53,9 @@ python ".\src\radar_oportunidades\analizar_643.py" `
   ".\data\salida_202610"
 ```
 
-El programa crea la carpeta de salida si no existe. Genera un resumen JSON y cuatro CSV: versiones, resultados, candidatos a relicitación y primeras versiones sin adjudicación. Los ZIP y los resultados son archivos locales que se pueden regenerar; no es necesario incluirlos en Git.
+El programa crea la carpeta de salida si no existe. Genera un resumen JSON y cuatro CSV: versiones, resultados, candidatos a relicitación y primeras versiones sin adjudicación.
+
+Además de las métricas generales, el resumen incluye `concurrencia_ti_cpv_72_48`: desiertos, lotes adjudicados con 0 o 1 ofertas, **baja concurrencia** (desierto o ≤1 oferta) y mediana de ofertas para los lotes TI (CPV 72 y 48), en total, sin procedimientos negociados y por código de procedimiento. Los CSV de versiones y resultados incorporan el procedimiento, el tipo de contrato y el importe sin IVA. Los ZIP y los resultados son archivos locales que se pueden regenerar; no es necesario incluirlos en Git.
 
 Para consultar los argumentos disponibles:
 

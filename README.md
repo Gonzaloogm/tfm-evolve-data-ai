@@ -12,11 +12,11 @@ Repositorio común del equipo para el proyecto transversal del máster. Se irá 
 
 ## Estado del proyecto
 
-**Exploración de ideas (Actividad 0).** Aún no hay idea definitiva. Tenemos tres candidatas y decidiremos tras comprobar el acceso, la licencia y la calidad de una muestra de cada fuente de datos:
+**Elección de idea (cierre de la Actividad 0).** Hay cinco propuestas documentadas en [`docs/entregas/00_ideas.md`](docs/entregas/00_ideas.md). Tras el feedback del profesorado:
 
-1. **RevPAR Pulse:** demanda y precios de alojamientos urbanos en Madrid.
-2. **CartRescue AI:** predicción de abandono de carrito y priorización de sesiones en e-commerce.
-3. **Radar de Oportunidades:** licitaciones TI desiertas o de baja concurrencia en contratación pública.
+- **Radar de Oportunidades** (licitaciones TI de baja concurrencia, datos abiertos de PLACSP) es la **candidata principal provisional**.
+- **CartRescue Marketplace** pasaría a ser la idea definitiva solo si Brainy Commerce confirma datos y un gestor que revise las salidas.
+- RevPAR Pulse, CartRescue AI y Cuándo Enchufo se mantienen documentadas como alternativas, con sus límites de datos comprobados.
 
 ## Índice de entregas
 
@@ -24,9 +24,17 @@ Repositorio común del equipo para el proyecto transversal del máster. Se irá 
 |---|---|
 | 0. Equipo, ideas y repositorio | [docs/entregas/00_ideas.md](docs/entregas/00_ideas.md) |
 
+### Exploración de datos (previa a la Actividad 1)
+
+| Contenido | Enlace |
+|---|---|
+| Radar: análisis de los ficheros mensuales de PLACSP (septiembre y octubre de 2026) | [radar-oportunidades/](radar-oportunidades/README.md) |
+| Radar: prueba preliminar de concurrencia en lotes TI | [docs/notas_fuentes/radar_prueba_concurrencia.md](docs/notas_fuentes/radar_prueba_concurrencia.md) |
+| RevPAR Pulse: inspección de Inside Airbnb y agenda de Madrid | [docs/notas_fuentes/idea1_gonzalo.md](docs/notas_fuentes/idea1_gonzalo.md) |
+
 ## Instrucciones de ejecución
 
-Pendiente. Se completarán cuando exista código (entorno, dependencias y comandos).
+Se completarán en la Actividad 1 (entorno, dependencias y comandos). Mientras tanto, el análisis exploratorio de Radar tiene sus propias instrucciones en [radar-oportunidades/README.md](radar-oportunidades/README.md).
 
 ## Datos
 

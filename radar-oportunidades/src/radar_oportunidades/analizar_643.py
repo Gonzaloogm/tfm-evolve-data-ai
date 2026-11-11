@@ -13,6 +13,7 @@ import csv
 import hashlib
 import json
 import re
+import statistics
 import zipfile
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
@@ -38,6 +39,13 @@ RESULTADOS = {
 }
 CODIGOS_RESUELTOS = set(RESULTADOS)
 CODIGOS_ADJUDICADOS = {"8", "9"}
+# Divisiones CPV de TI que analiza Radar: 72 (servicios TI) y 48 (paquetes de software).
+DIVISIONES_TI = ("72", "48")
+# ProcedureCode de CODICE para procedimientos negociados (sin y con publicidad).
+# En ellos una sola oferta es habitual por la naturaleza del procedimiento, así que
+# se excluyen del cálculo de baja concurrencia "comparable". Pendiente de confirmar
+# contra la lista de códigos oficial de PLACSP.
+PROCEDIMIENTOS_NEGOCIADOS = {"3", "4"}
 
 
 def texto(nodo: ET.Element | None, ruta: str) -> str:
@@ -92,6 +100,9 @@ def leer_entrada(entrada: ET.Element, archivo: str) -> tuple[dict, list[dict]]:
         "estado": texto(cfs, "cbc-place-ext:ContractFolderStatusCode"),
         "cpv_principal": cpvs[0] if cpvs else "",
         "cpvs": ", ".join(cpvs),
+        "procedimiento": texto(cfs, "cac:TenderingProcess/cbc:ProcedureCode"),
+        "tipo_contrato": texto(proyecto, "cbc:TypeCode"),
+        "importe_sin_iva": texto(proyecto, "cac:BudgetAmount/cbc:TaxExclusiveAmount"),
         "referencias": json.dumps(list(dict.fromkeys(referencias)), ensure_ascii=False),
     }
     resultados = []
@@ -104,6 +115,11 @@ def leer_entrada(entrada: ET.Element, archivo: str) -> tuple[dict, list[dict]]:
                 "expediente": fila["expediente"],
                 "organo": fila["organo"],
                 "titulo": fila["titulo"],
+                "cpv_principal": fila["cpv_principal"],
+                "cpvs": fila["cpvs"],
+                "procedimiento": fila["procedimiento"],
+                "importe_sin_iva": fila["importe_sin_iva"],
+                "lote": texto(resultado, "cac:AwardedTenderedProject/cbc:ProcurementProjectLotID"),
                 "result_index": indice,
                 "result_code": codigo,
                 "result_label": RESULTADOS.get(codigo, ""),
@@ -111,6 +127,53 @@ def leer_entrada(entrada: ET.Element, archivo: str) -> tuple[dict, list[dict]]:
                 "fecha_adjudicacion": texto(resultado, "cbc:AwardDate"),
             })
     return fila, resultados
+
+
+def es_ti(resultado: dict) -> bool:
+    """True si el expediente tiene algún CPV de las divisiones TI (72 o 48)."""
+    return any(cpv[:2] in DIVISIONES_TI for cpv in resultado["cpvs"].split(", ") if cpv)
+
+
+def resumen_concurrencia(resultados: list[dict]) -> dict:
+    """Desiertos, una oferta y baja concurrencia sobre lotes resueltos (3, 8 y 9).
+
+    Baja concurrencia = lote desierto (3) o adjudicado/formalizado (8, 9) con 0 o 1
+    ofertas. Los lotes con desistimiento (4) o renuncia (5) no entran en el cálculo.
+    """
+    resueltos = [r for r in resultados if r["result_code"] in {"3", "8", "9"}]
+    desiertos = [r for r in resueltos if r["result_code"] == "3"]
+    adjudicados_con_ofertas = []
+    for r in resueltos:
+        if r["result_code"] in CODIGOS_ADJUDICADOS:
+            try:
+                adjudicados_con_ofertas.append(float(r["ofertas"]))
+            except ValueError:
+                pass
+    pocas = [n for n in adjudicados_con_ofertas if n <= 1]
+    pct = lambda a, b: round(100 * a / b, 2) if b else None
+    return {
+        "lotes_resueltos_3_8_9": len(resueltos),
+        "desiertos": len(desiertos),
+        "pct_desiertos": pct(len(desiertos), len(resueltos)),
+        "adjudicados_con_ofertas_numericas": len(adjudicados_con_ofertas),
+        "pct_adjudicados_con_0_o_1_ofertas": pct(len(pocas), len(adjudicados_con_ofertas)),
+        "pct_baja_concurrencia": pct(len(desiertos) + len(pocas), len(desiertos) + len(adjudicados_con_ofertas)),
+        "mediana_ofertas": statistics.median(adjudicados_con_ofertas) if adjudicados_con_ofertas else None,
+    }
+
+
+def metricas_concurrencia_ti(resultados_ultimos: list[dict]) -> dict:
+    """Concurrencia en lotes TI, en total, sin negociados y por procedimiento."""
+    ti = [r for r in resultados_ultimos if es_ti(r)]
+    por_procedimiento: dict[str, list[dict]] = defaultdict(list)
+    for r in ti:
+        por_procedimiento[r["procedimiento"] or "sin_codigo"].append(r)
+    return {
+        "nota": "Lotes de la última versión del periodo con algún CPV 72 o 48. Códigos de procedimiento pendientes de confirmar con la lista oficial.",
+        "total": resumen_concurrencia(ti),
+        "sin_negociados": resumen_concurrencia([r for r in ti if r["procedimiento"] not in PROCEDIMIENTOS_NEGOCIADOS]),
+        "por_procedimiento": {codigo: resumen_concurrencia(filas) for codigo, filas in sorted(por_procedimiento.items())},
+    }
 
 
 def escribir_csv(ruta: Path, filas: list[dict], columnas: list[str]) -> None:
@@ -232,8 +295,10 @@ def analizar(ruta_zip: Path, salida: Path) -> dict:
                     "regla": "mismo órgano, título normalizado y CPV principal; IDs y expediente distintos; validar manualmente",
                 })
 
-    cols_version = ["atom_id", "updated", "archivo_atom", "enlace", "expediente", "titulo", "organo", "estado", "cpv_principal", "cpvs", "referencias"]
-    cols_resultado = ["atom_id", "updated", "expediente", "organo", "titulo", "result_index", "result_code", "result_label", "ofertas", "fecha_adjudicacion"]
+    concurrencia_ti = metricas_concurrencia_ti(resultados_ultimos)
+
+    cols_version = ["atom_id", "updated", "archivo_atom", "enlace", "expediente", "titulo", "organo", "estado", "cpv_principal", "cpvs", "procedimiento", "tipo_contrato", "importe_sin_iva", "referencias"]
+    cols_resultado = ["atom_id", "updated", "expediente", "organo", "titulo", "cpv_principal", "cpvs", "procedimiento", "importe_sin_iva", "lote", "result_index", "result_code", "result_label", "ofertas", "fecha_adjudicacion"]
     escribir_csv(salida / f"versiones_643_{periodo_archivo}.csv", versiones_periodo, cols_version)
     escribir_csv(salida / f"resultados_643_{periodo_archivo}.csv", filas_resultados, cols_resultado)
     escribir_csv(salida / f"versiones_iniciales_sin_adjudicacion_643_{periodo_archivo}.csv", iniciales_sin_adjudicacion, cols_version)
@@ -275,6 +340,7 @@ def analizar(ruta_zip: Path, salida: Path) -> dict:
         "versiones_iniciales_dentro_del_zip_sin_adjudicacion_final": len(iniciales_sin_adjudicacion),
         "candidatos_relicitacion_heuristica_titulo_organo_cpv": len(candidatos),
         "desiertos_historicos_ultima_version_feed": len(desiertos_previos),
+        "concurrencia_ti_cpv_72_48": concurrencia_ti,
         "limitacion_temporal": "La versión inicial se refiere a la primera versión presente en este ZIP mensual; la historia anterior al mes puede no estar incluida.",
     }
     (salida / f"resumen_643_{periodo_archivo}.json").write_text(json.dumps(metadatos, ensure_ascii=False, indent=2), encoding="utf-8")
