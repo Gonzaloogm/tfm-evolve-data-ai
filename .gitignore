@@ -17,6 +17,8 @@ credentials*.json
 data/raw/*
 data/silver/*
 data/gold/*
+# Datos locales del spike Radar de Oportunidades
+radar-oportunidades/data/
 !data/raw/.gitkeep
 !data/silver/.gitkeep
 !data/gold/.gitkeep
