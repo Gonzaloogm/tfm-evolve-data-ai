@@ -12,17 +12,16 @@ Repositorio común del equipo para el proyecto transversal del máster. Se irá 
 
 ## Estado del proyecto
 
-**Elección de idea (cierre de la Actividad 0).** Hay cinco propuestas documentadas en [`docs/entregas/00_ideas.md`](docs/entregas/00_ideas.md). Tras el feedback del profesorado:
-
-- **Radar de Oportunidades** (licitaciones TI de baja concurrencia, datos abiertos de PLACSP) es la **candidata principal provisional**.
-- **CartRescue Marketplace** pasaría a ser la idea definitiva solo si Brainy Commerce confirma datos y un gestor que revise las salidas.
-- RevPAR Pulse, CartRescue AI y Cuándo Enchufo se mantienen documentadas como alternativas, con sus límites de datos comprobados.
+**Actividad 1 en curso. Idea definitiva: Radar de Oportunidades**, un radar de licitaciones públicas TI con baja concurrencia a partir de los datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP). La decisión y su motivo están en [`docs/decisiones.md`](docs/decisiones.md). Las otras cuatro propuestas siguen documentadas en [`docs/entregas/00_ideas.md`](docs/entregas/00_ideas.md).
 
 ## Índice de entregas
 
 | Actividad | Documento |
 |---|---|
 | 0. Equipo, ideas y repositorio | [docs/entregas/00_ideas.md](docs/entregas/00_ideas.md) |
+| 1. Python: fuentes de datos, EDA y limpieza | [docs/entregas/01_python.md](docs/entregas/01_python.md) · notebook [notebooks/01_python.ipynb](notebooks/01_python.ipynb) |
+
+Registro de decisiones del proyecto: [docs/decisiones.md](docs/decisiones.md).
 
 ### Exploración de datos (previa a la Actividad 1)
 
@@ -34,8 +33,26 @@ Repositorio común del equipo para el proyecto transversal del máster. Se irá 
 
 ## Instrucciones de ejecución
 
-Se completarán en la Actividad 1 (entorno, dependencias y comandos). Mientras tanto, el análisis exploratorio de Radar tiene sus propias instrucciones en [radar-oportunidades/README.md](radar-oportunidades/README.md).
+1. Crear el entorno (Python 3.12 o superior) e instalar las dependencias:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate        # en Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+2. Descargar los ficheros mensuales de PLACSP en `data/raw/placsp/`, como se explica en [data/README.md](data/README.md).
+3. Ejecutar [notebooks/01_python.ipynb](notebooks/01_python.ipynb) de principio a fin. Genera la capa silver en `data/silver/`.
+
+## Estructura del repositorio
+
+| Carpeta | Contenido |
+|---|---|
+| `docs/entregas/` | Fichas de cada actividad |
+| `docs/notas_fuentes/` | Notas de las comprobaciones de fuentes |
+| `notebooks/` | Notebooks ejecutables (EDA y limpieza) |
+| `src/radar/` | Código reutilizable: lectura de PLACSP y etiquetas de códigos |
+| `data/` | Datos locales (no versionados) y muestras pequeñas en `data/muestras/` |
+| `radar-oportunidades/` | Análisis exploratorio previo de los ficheros mensuales (11/11/2026) |
 
 ## Datos
 
-Los datos crudos y procesados no se suben al repositorio (ver `.gitignore`). Cada fuente se documentará con su licencia, fecha de descarga y forma de obtenerla.
+Los datos crudos y procesados no se suben al repositorio (ver `.gitignore`). Fuente, condiciones de uso, forma de obtenerlos y diccionario de la capa silver: [data/README.md](data/README.md).
