@@ -1,7 +1,9 @@
-# Entorno probado con Python 3.12-3.13
-pandas>=2.2
-numpy>=1.26
-pyarrow>=15        # lectura y escritura de parquet (capa silver)
-matplotlib>=3.8
-jupyter>=1.0       # ejecutar notebooks/01_python.ipynb
-ipykernel>=6.29
+# Versiones probadas con Python 3.13 (17/11/2026). Se fijan para que la silver
+# y las muestras salgan idénticas en cualquier equipo.
+pandas==3.1.1
+numpy==2.5.4
+pyarrow==26.0.1      # lectura y escritura de parquet (capa silver)
+matplotlib==3.11.2
+jupyter==1.1.1       # ejecutar notebooks/01_python.ipynb
+ipykernel==7.4.0
+nbconvert==7.17.2    # ejecución sin abrir Jupyter: jupyter nbconvert --execute

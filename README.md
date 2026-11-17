@@ -12,7 +12,7 @@ Repositorio común del equipo para el proyecto transversal del máster. Se irá 
 
 ## Estado del proyecto
 
-**Actividad 1 en curso. Idea definitiva: Radar de Oportunidades**, un radar de licitaciones públicas TI con baja concurrencia a partir de los datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP). La decisión y su motivo están en [`docs/decisiones.md`](docs/decisiones.md). Las otras cuatro propuestas siguen documentadas en [`docs/entregas/00_ideas.md`](docs/entregas/00_ideas.md).
+**Actividad 1 entregada; siguiente, Actividad 2 (SQL y capa gold). Idea definitiva: Radar de Oportunidades**, un radar de licitaciones públicas TI con baja concurrencia a partir de los datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP). La decisión y su motivo están en [`docs/decisiones.md`](docs/decisiones.md). Las otras cuatro propuestas siguen documentadas en [`docs/entregas/00_ideas.md`](docs/entregas/00_ideas.md).
 
 ## Índice de entregas
 
@@ -33,7 +33,7 @@ Registro de decisiones del proyecto: [docs/decisiones.md](docs/decisiones.md).
 
 ## Instrucciones de ejecución
 
-1. Crear el entorno (Python 3.12 o superior) e instalar las dependencias:
+1. Crear el entorno (Python 3.12 o superior; probado con 3.13) e instalar las dependencias:
    ```bash
    python -m venv .venv
    source .venv/bin/activate        # en Windows: .venv\Scripts\activate

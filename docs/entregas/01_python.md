@@ -4,6 +4,8 @@
 
 **Evidencias:** notebook [`notebooks/01_python.ipynb`](../../notebooks/01_python.ipynb) · parser [`src/radar/placsp.py`](../../src/radar/placsp.py) · códigos [`src/radar/codigos.py`](../../src/radar/codigos.py) · datos y diccionario de silver [`data/README.md`](../../data/README.md) · muestras [`data/muestras/`](../../data/muestras/) · decisiones [`docs/decisiones.md`](../decisiones.md) · análisis exploratorio previo de los ficheros mensuales [`radar-oportunidades/`](../../radar-oportunidades/README.md)
 
+**Pipeline de la entrega:** el notebook más `src/radar/`. El script de `radar-oportunidades/` es la exploración que se hizo antes de elegir la idea; se conserva como antecedente, pero no forma parte de este pipeline ni genera la silver.
+
 ## 1. Idea candidata
 
 **Radar de Oportunidades** es la idea definitiva del proyecto (ver [`docs/decisiones.md`](../decisiones.md)). CartRescue Marketplace dependía de que Brainy Commerce cediera datos y un revisor, y no hubo respuesta. Radar es la única propuesta con datos públicos reales que no depende de una colaboración externa.
@@ -113,7 +115,10 @@ Salidas: `data/silver/placsp_ti_versiones.parquet`, `data/silver/placsp_ti_resul
 2. **La variable objetivo es viable.** La baja concurrencia afecta al 43,6 % de los lotes TI (35,4 % sin negociados), frente al 3 % de desiertos. Varía mucho según el procedimiento (29,3 % en abierto, 95,7 % en negociado sin publicidad), así que hay patrones que modelar. Los negociados se tratarán aparte.
 3. **La calidad es buena y la limpieza, acotada.** El problema principal eran las versiones repetidas entre documentos; los nulos son pocos o tienen explicación.
 4. **Limitación principal: falta histórico.** Solo 1.092 de 4.692 expedientes tienen su versión en plazo dentro de los dos meses. Para entrenar sin fuga de información hay que ampliar a 12 meses o más y unir la versión en plazo con el resultado final.
-5. **Siguientes pasos:** verificar las etiquetas de códigos (#2), ampliar el histórico (Actividad 2) y validar con un comercial o preventa TI que la salida le ayuda a decidir.
+5. **Sesgos de la muestra.** Hay dos que limitan cómo se pueden leer las cifras:
+   - **Censura temporal.** Los resultados de la muestra corresponden a lotes que se **resolvieron** en septiembre u octubre, no a las licitaciones que se **abrieron** entonces. De los 1.092 expedientes con versión en plazo, solo 97 tienen ya resultado. Y de los 3.156 expedientes con resultado, solo esos mismos 97 tienen su versión en plazo dentro de los dos meses. Si unos procedimientos se resuelven antes que otros, el reparto por procedimiento del 43,6 % puede estar desplazado. Por eso el 43,6 % describe las resoluciones de esos dos meses y no se puede tomar como la tasa de todas las licitaciones TI.
+   - **Cobertura geográfica.** Según el lugar de ejecución de la última versión, Madrid (ES30) reúne 1.540 expedientes (32,8 %), en parte porque ahí están los órganos de la Administración General del Estado. Cataluña (ES51) tiene solo 84 (1,8 %) y el País Vasco (ES21), 34 (0,7 %). Encaja con que algunas comunidades publican en sus propias plataformas, que esta sindicación no recoge. El producto debe avisar de que hay comunidades con cobertura parcial.
+6. **Siguientes pasos:** verificar las etiquetas de códigos (#2), ampliar el histórico (Actividad 2) y validar con un comercial o preventa TI que la salida le ayuda a decidir.
 
 ## 8. Cómo reproducir
 
